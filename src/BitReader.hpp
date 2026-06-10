@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Bits.hpp"
+
 #include <istream>
 #include <cstdint>
 #include <string>
@@ -31,6 +33,7 @@ public:
     uint64_t readUInt64();
 
     void readAllData(std::vector<uint8_t> &inData);
+    void readBits(size_t bitsCount, Bits &bits);
 
     bool eof() const;
 

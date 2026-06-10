@@ -73,6 +73,10 @@ uint64_t BitReader::readUInt64() {
     return value;
 }
 
+void BitReader::readBits(size_t bitsCount, Bits &bits) {
+
+}
+
 bool BitReader::eof() const {
     return in_.eof() && bitPos >= bitsRead;
 }

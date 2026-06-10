@@ -3,6 +3,7 @@
 #include <istream>
 #include <cstdint>
 #include <string>
+#include <vector>
 
 class BitReaderException : public std::runtime_error {
 public:
@@ -21,22 +22,24 @@ public:
 
 class BitReader {
 public:
-    explicit BitReader(std::istream& in);
+    explicit BitReader(std::istream& in, size_t bufferSizeBytes = 65536);
 
     bool readBit();
-
-    uint32_t readBits(int n);
-
-    uint8_t  readByte();
+    uint8_t readUInt8();
     uint16_t readUInt16();
     uint32_t readUInt32();
+    uint64_t readUInt64();
+
+    void readAllData(std::vector<uint8_t> &inData);
 
     bool eof() const;
 
 private:
     std::istream& in_;
-    uint8_t buffer_ = 0;
-    int bitsLeft_ = 0;
+    std::vector<uint8_t> buffer;
+    size_t bufferSizeBytes_;
+    size_t bitPos = 0;
+    size_t bitsRead = 0;
 
     void fillBuffer();
 };

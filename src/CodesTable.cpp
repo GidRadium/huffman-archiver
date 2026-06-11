@@ -53,3 +53,9 @@ void CodesTable::addBits(const std::list<uint8_t>& bytes, bool bit) {
 uint8_t CodesTable::getCodeLength(uint8_t code) {
     return data[code].bitsCount;
 }
+
+void CodesTable::reverseAllBits() {
+    for (size_t i = 0; i < 256; ++i)
+        if (data[i].bitsCount > 1)
+            data[i].reverse();
+}

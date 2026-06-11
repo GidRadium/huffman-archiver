@@ -22,6 +22,7 @@ public:
     Bits toBits() const;
     void addBits(const std::list<uint8_t> &bytes, bool bit);
     uint8_t getCodeLength(uint8_t code);
+    void reverseAllBits();
 
 //private:
     std::array<Bits, 256> data;

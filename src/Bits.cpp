@@ -17,10 +17,7 @@ void Bits::addBit(bool bit) {
 }
 
 bool Bits::bitAt(size_t index) const {
-    size_t byteIdx = index >> 3;
-    size_t shift = 7 - (index & 7);
-
-    return (bytes[byteIdx] >> shift) & 1;
+    return (bytes[index >> 3] >> (7 - (index & 7))) & 1;
 }
 
 void Bits::append(const Bits& other) {
@@ -37,6 +34,18 @@ Bits Bits::slice(size_t startBit, size_t length) const {
     return result;
 }
 
+void Bits::reverse() {
+    if (bitsCount <= 1)
+        return;
+
+    Bits reversed;
+    for (size_t i = bitsCount; i-- > 0; )
+        reversed.addBit(bitAt(i));
+
+    bytes = std::move(reversed.bytes);
+    bitsCount = reversed.bitsCount;
+}
+
 uint8_t Bits::toByte(size_t startBit, size_t length) const {
     if (length > 8 || startBit + length > bitsCount)
         throw std::runtime_error("toByte out of range");
@@ -51,4 +60,11 @@ Bits Bits::fromByte(uint8_t val) {
     for (int i = 7; i >= 0; --i)
         b.addBit((val >> i) & 1);
     return b;
+}
+
+std::ostream& operator<<(std::ostream& os, const Bits& bits) {
+    for (size_t i = 0; i < bits.bitsCount; ++i)
+        os << (bits.bitAt(i) ? '1' : '0');
+
+    return os;
 }

@@ -7,16 +7,22 @@
 #include <vector>
 #include <array>
 #include <list>
+#include <stdexcept>
+#include <string>
+
+class CodesTableException : public std::runtime_error {
+public:
+    explicit CodesTableException(const std::string& msg) : std::runtime_error(msg) {}
+};
 
 class CodesTable {
 public:
     CodesTable();
     CodesTable(Bits bits);
-
     Bits toBits() const;
     void addBits(const std::list<uint8_t> &bytes, bool bit);
+    uint8_t getCodeLength(uint8_t code);
 
-private:
-    // data[byte] = <bitsCount, bitsAsUInts64>
-    std::array<std::pair<size_t, std::vector<uint64_t>>, 256> data;
+//private:
+    std::array<Bits, 256> data;
 };

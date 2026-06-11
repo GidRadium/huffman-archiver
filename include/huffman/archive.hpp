@@ -9,4 +9,4 @@ enum class CompressMode {
     SAVE_TO_DISK
 };
 
-void archive(std::istream in, std::ostream, CompressMode mode);
+void archive(std::istream &in, std::ostream &out, CompressMode mode);

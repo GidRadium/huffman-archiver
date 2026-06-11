@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # For .clangd
 
 add_library(huffman STATIC
+    src/Bits.cpp
     src/BitReader.cpp
     src/BitWriter.cpp
     src/CodesTable.cpp

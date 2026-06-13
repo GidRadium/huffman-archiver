@@ -1,3 +1,3 @@
 #pragma once
 
-int run_app(int argc, char* argv[]);
+int runConsoleApp(int argc, char* argv[]);

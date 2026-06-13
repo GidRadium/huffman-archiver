@@ -4,6 +4,8 @@
 #include "unarchive.hpp"
 
 #include <string.h>
+#include <iostream>
+#include <fstream>
 
 struct Options
 {
@@ -55,7 +57,7 @@ Options parseArguments(int argc, char* argv[])
         return options;
     }
 
-    options.input = argv[3];
+    options.input = argv[2];
 
     if (argc < 4) {
         options.valid = false;
@@ -64,9 +66,9 @@ Options parseArguments(int argc, char* argv[])
         return options;
     }
 
-    options.output = argv[4];
+    options.output = argv[3];
 
-    for (size_t i = 5; i < argc; ++i) {
+    for (size_t i = 4; i < argc; ++i) {
         std::string option = argv[i];
         if (option == "-m" || option == "--mode") {
             if (i + 1 >= argc) {
@@ -108,7 +110,7 @@ Options parseArguments(int argc, char* argv[])
 void printUsage(const char* executableName)
 {
     std::cerr << "Usage\n\n"
-        << executableName << " <command> <input> <output> [options]\n"
+        << "  " << executableName << " <command> <input> <output> [options]\n\n"
         << "Commands\n\n"
         << "  compress (c)      = Compress input to output\n"
         << "  decompress (d)    = Decompress input to output\n\n"
@@ -116,8 +118,62 @@ void printUsage(const char* executableName)
         << "  -m, --mode <mode> = Set compression mode (default: twice)\n"
         << "                      Modes:\n"
         << "                      ram (load full input file to RAM),\n"
-        << "                      twice (read input file two times),disk\n"
-        << "                      disk (use disk to temporary save input data)\n"
+        << "                      twice (read input file two times),\n"
+        << "                      disk (use disk to temporary save input data).\n"
         << "  -h, -H, -help\n"
         << "  --help            = Print usage information and exit.\n";
+}
+
+
+int runConsoleApp(int argc, char* argv[])
+{
+    Options options = parseArguments(argc, argv);
+
+    if (!options.valid) {
+        std::cerr << "Error: " << options.error << '\n'
+            << "Specify --help for usage.\n";
+
+        return 1;
+    }
+
+    if (options.show_help) {
+        printUsage(argv[0]);
+
+        return 0;
+    }
+
+    if (int(options.compress) + int(options.decompress) != 1) {
+        std::cerr << "Error: invalid command.\n";
+
+        return -1;
+    }
+
+    std::ifstream inputFile(options.input, std::ios::binary);
+    if (!inputFile) {
+        std::cerr << "Error: can't open " << options.input << ".\n";
+
+        return -1;
+    }
+
+    std::ofstream outputFile(options.output, std::ios::binary);
+    if (!outputFile) {
+        std::cerr << "Error: can't open " << options.output << ".\n";
+
+        return -1;
+    }
+
+    try {
+        if (options.compress) {
+            archive(inputFile, outputFile, options.mode);
+        } else {
+            unarchive(inputFile, outputFile);
+        }
+    } catch (...) {
+        std::cerr << "Error: unexpected error." << ".\n";
+    }
+
+    inputFile.close();
+    outputFile.close();
+
+    return 0;
 }

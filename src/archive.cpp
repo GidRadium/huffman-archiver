@@ -101,13 +101,13 @@ void archive(std::istream &in, std::ostream &out, CompressMode mode)
     switch (mode) {
         case CompressMode::SAVE_TO_RAM:
             for (uint8_t byte : inData)
-                writer.writeBits(codesTable.data[byte]);
+                writer.writeBits(codesTable.getCode(byte));
 
             break;
         case CompressMode::READ_TWICE:
             reader.reset();
             while (!reader.eof())
-                writer.writeBits(codesTable.data[reader.readUInt8()]);
+                writer.writeBits(codesTable.getCode(reader.readUInt8()));
 
             break;
         case CompressMode::SAVE_TO_DISK:

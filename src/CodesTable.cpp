@@ -2,28 +2,31 @@
 
 CodesTable::CodesTable() = default;
 
-CodesTable::CodesTable(Bits bits) {
-    if (bits.size() < 8)
-        throw CodesTableException("Invalid Bits: too short for N");
-
-    size_t pos = 0;
-    uint8_t n = bits.toByte(pos);
-    pos += 8;
-
-    for (uint8_t i = 0; i < n; ++i) {
-        uint8_t symbol = bits.toByte(pos);
-        pos += 8;
-        uint8_t length = bits.toByte(pos);
+CodesTable::CodesTable(const Bits& bits)
+{
+    try {
+        size_t pos = 0;
+        uint8_t n = bits.toByte(pos);
         pos += 8;
 
-        if (length == 0) continue;
+        for (uint8_t i = 0; i < n; ++i) {
+            uint8_t symbol = bits.toByte(pos);
+            pos += 8;
+            uint8_t length = bits.toByte(pos);
+            pos += 8;
 
-        data[symbol] = bits.slice(pos, length);
-        pos += length;
+            if (length == 0) continue;
+
+            data[symbol] = bits.slice(pos, length);
+            pos += length;
+        }
+    } catch (const std::out_of_range& e) {
+        throw CodesTableException(std::string("CodesTable::CodesTable: Bits data is incorrect. ") + e.what());
     }
 }
 
-Bits CodesTable::toBits() const {
+Bits CodesTable::toBits() const
+{
     size_t n = 0;
     for (const auto& entry : data)
         if (entry.size() > 0) ++n;
@@ -42,19 +45,26 @@ Bits CodesTable::toBits() const {
     return result;
 }
 
-void CodesTable::addBits(const std::list<uint8_t>& bytes, bool bit) {
+void CodesTable::addBits(const std::list<uint8_t>& bytes, bool bit)
+{
     for (uint8_t sym : bytes) {
         Bits& entry = data[sym];
-        // if (entry.bitsCount == 0) continue;
         entry.addBit(bit);
     }
 }
 
-uint8_t CodesTable::getCodeLength(uint8_t code) {
+uint8_t CodesTable::getCodeLength(uint8_t code) const
+{
     return data[code].size();
 }
 
-void CodesTable::reverseAllBits() {
+const Bits& CodesTable::getCode(uint8_t byte) const
+{
+    return data[byte];
+}
+
+void CodesTable::reverseAllBits()
+{
     for (size_t i = 0; i < 256; ++i)
         if (data[i].size() > 1)
             data[i].reverse();

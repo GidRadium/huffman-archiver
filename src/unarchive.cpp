@@ -18,9 +18,9 @@ std::unique_ptr<Node> buildTree(const CodesTable& codesTable)
     std::unique_ptr<Node> root = std::make_unique<Node>();
 
     for (size_t byte = 0; byte < 256; ++byte) {
-        const Bits& code = codesTable.data[byte];
+        const Bits& code = codesTable.getCode(byte);
         if (code.size() == 0) continue;
-        std::cout << (char)byte << " : " << codesTable.data[byte] << std::endl;
+        std::cout << (char)byte << " : " << codesTable.getCode(byte) << std::endl;
 
         Node* current = root.get();
         for (size_t i = 0; i < code.size(); ++i) {

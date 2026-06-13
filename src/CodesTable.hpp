@@ -13,15 +13,30 @@ public:
     explicit CodesTableException(const std::string& msg) : std::runtime_error(msg) {}
 };
 
+// Таблица кодов символов.
 class CodesTable {
 public:
+    // Конструктор по умолчанию.
     CodesTable();
-    CodesTable(Bits bits);
+
+    // Десеариализирует и инициализирует полученными кодами.
+    CodesTable(const Bits& bits);
+
+    // Сериализирует в последовательность бит.
     Bits toBits() const;
+
+    // Добавляет бит в конец каждого из кодов из списка.
     void addBits(const std::list<uint8_t> &bytes, bool bit);
-    uint8_t getCodeLength(uint8_t code);
+
+    // Отдаёт длину кода байта.
+    uint8_t getCodeLength(uint8_t byte) const;
+
+    // Отдаёт константную ссылку на код байта.
+    const Bits& getCode(uint8_t byte) const;
+
+    // Ставит биты кодов всех байт в обратном порядке.
     void reverseAllBits();
 
-//private:
+private:
     std::array<Bits, 256> data;
 };

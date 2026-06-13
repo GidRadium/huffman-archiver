@@ -2,9 +2,7 @@
 
 #include "Bits.hpp"
 
-#include <cstddef>
 #include <cstdint>
-#include <vector>
 #include <array>
 #include <list>
 #include <stdexcept>

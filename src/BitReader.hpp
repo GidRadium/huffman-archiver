@@ -24,18 +24,35 @@ public:
 
 class BitReader {
 public:
+    // Инициализирует потоком данных. Устанавливает размер буфера (64 МБ по умолчанию)
     explicit BitReader(std::istream& in, size_t bufferSizeBytes = 65536);
 
+    // Читает один бит из потока
     bool readBit();
+
+    // Читает 8 бит как uint_8t. Возможен BitReaderEOFError.
     uint8_t readUInt8();
+
+    // Читает 16 бит как uint_16t. Возможен BitReaderEOFError.
     uint16_t readUInt16();
+
+    // Читает 32 бит как uint_32t. Возможен BitReaderEOFError.
     uint32_t readUInt32();
+
+    // Читает 64 бит как uint_64t. Возможен BitReaderEOFError.
     uint64_t readUInt64();
 
-    void readAllData(std::vector<uint8_t> &inData);
+    // Читает и возвращает все данные из потока.
+    std::vector<uint8_t> readAllData();
+
+    // Читает произвольное количество бит. Возможен BitReaderEOFError.
     Bits readBits(size_t bitsToRead);
 
+    // Возвращает true, если достигнут конец потока.
     bool eof() const;
+
+    // Сбрасывает буфер, начинает читать с начала потока. Возможен BitReaderIOError.
+    void reset();
 
 private:
     std::istream& in_;

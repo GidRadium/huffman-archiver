@@ -1,20 +1,26 @@
 #include "BitReader.hpp"
 
 BitReader::BitReader(std::istream& in, size_t bufferSizeBytes)
-    : in_(in), bufferSizeBytes_(bufferSizeBytes), bitPos(0), bitsRead(0) {
+    : in_(in), bufferSizeBytes_(bufferSizeBytes), bitPos(0), bitsRead(0)
+{
     buffer.clear();
     buffer.resize(bufferSizeBytes, 0);
 }
 
-void BitReader::readAllData(std::vector<uint8_t> &inData) {
+std::vector<uint8_t> BitReader::readAllData()
+{
+    std::vector<uint8_t> inData;
     while (in_.read(reinterpret_cast<char*>(buffer.data()), buffer.size())
         || in_.gcount() > 0) {
         auto bytes = in_.gcount();
         inData.insert(inData.end(), buffer.data(), buffer.data() + bytes);
     }
+
+    return inData;
 }
 
-void BitReader::fillBuffer() {
+void BitReader::fillBuffer()
+{
     in_.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
     if (in_.bad())
         throw BitReaderIOError("I/O error while reading from stream");
@@ -23,12 +29,12 @@ void BitReader::fillBuffer() {
     bitPos = 0;
 }
 
-bool BitReader::readBit() {
+bool BitReader::readBit()
+{
     if (bitPos >= bitsRead) {
         fillBuffer();
-        if (bitsRead == 0) {
-            throw BitReaderEOFError("EOF by readBit");
-        }
+        if (bitsRead == 0)
+            throw BitReaderEOFError("BitReader::readBit: EOF");
     }
 
     bool bit = (buffer[bitPos >> 3] >> (7 - (bitPos & 7))) & 1; // TODO optimize
@@ -37,7 +43,8 @@ bool BitReader::readBit() {
     return bit;
 }
 
-uint8_t BitReader::readUInt8() {
+uint8_t BitReader::readUInt8()
+{
     if ((bitPos & 7) == 0 && bitsRead - bitPos >= 8) {
         uint8_t value = buffer[bitPos >> 3];
         bitPos += 8;
@@ -52,7 +59,8 @@ uint8_t BitReader::readUInt8() {
     return value;
 }
 
-uint16_t BitReader::readUInt16() {
+uint16_t BitReader::readUInt16()
+{
     if ((bitPos & 7) == 0 && bitsRead - bitPos >= 16) {
         size_t bytePos = bitPos >> 3;
         uint16_t value = (uint16_t(buffer[bytePos]) << 8) | buffer[bytePos + 1];
@@ -68,7 +76,8 @@ uint16_t BitReader::readUInt16() {
     return value;
 }
 
-uint32_t BitReader::readUInt32() {
+uint32_t BitReader::readUInt32()
+{
     if ((bitPos & 7) == 0 && bitsRead - bitPos >= 32) {
         size_t bytePos = bitPos >> 3;
         uint32_t value = (uint32_t(buffer[bytePos]) << 24)
@@ -87,7 +96,8 @@ uint32_t BitReader::readUInt32() {
     return value;
 }
 
-uint64_t BitReader::readUInt64() {
+uint64_t BitReader::readUInt64()
+{
     if ((bitPos & 7) == 0 && bitsRead - bitPos >= 64) {
         size_t bytePos = bitPos >> 3;
         uint64_t value = (uint64_t(buffer[bytePos]) << 56)
@@ -110,7 +120,8 @@ uint64_t BitReader::readUInt64() {
     return value;
 }
 
-Bits BitReader::readBits(size_t bitsToRead) {
+Bits BitReader::readBits(size_t bitsToRead)
+{
     Bits result;
     if (bitsToRead == 0)
         return result;
@@ -121,7 +132,7 @@ Bits BitReader::readBits(size_t bitsToRead) {
         if (bitPos >= bitsRead) {
             fillBuffer();
             if (bitsRead == 0)
-                throw BitReaderEOFError("EOF by readBits");
+                throw BitReaderEOFError("BitReader::readBits: EOF");
         }
 
         if ((bitPos & 7) == 0 && remaining >= 8 && (bitsRead - bitPos) >= 8) {
@@ -143,6 +154,18 @@ Bits BitReader::readBits(size_t bitsToRead) {
     return result;
 }
 
-bool BitReader::eof() const {
+bool BitReader::eof() const
+{
     return in_.eof() && bitPos >= bitsRead;
+}
+
+void BitReader::reset()
+{
+    in_.clear();
+    if (!in_.seekg(0, std::ios::beg))
+        throw BitReaderIOError("Failed to seek to beginning of stream");
+
+    bitPos = 0;
+    bitsRead = 0;
+    buffer.clear();
 }

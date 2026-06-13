@@ -12,8 +12,6 @@
 #include <queue>
 #include <functional>
 
-#include <iostream> // debug
-
 CountTable countBytes(const std::vector<uint8_t> &inData)
 {
     CountTable countTable;
@@ -31,24 +29,16 @@ void calculateCodesTable(const CountTable &countTable, CodesTable &codesTable)
         std::greater<std::pair<size_t, std::list<uint8_t>>>
     > huffmanUnTree;
 
-    for (size_t byte = 0; byte < 256; ++byte) {
-        if (countTable[byte] > 0) {
+    for (size_t byte = 0; byte < 256; ++byte)
+        if (countTable[byte] > 0)
             huffmanUnTree.push(std::make_pair(countTable[byte], std::list<uint8_t>(1, byte)));
-            //std::cout << (char)byte << " " << countTable[byte] << std::endl;
-        }
-    }
 
     while (!huffmanUnTree.empty()) {
         std::pair<size_t, std::list<uint8_t>> smallestFirst = huffmanUnTree.top();
         huffmanUnTree.pop();
-
         if (huffmanUnTree.empty()) break;
 
         std::pair<size_t, std::list<uint8_t>> smallestSecond = huffmanUnTree.top();
-
-        //std::cout << smallestFirst.first << ":" << smallestFirst.second.size() << " ";
-        //std::cout << smallestSecond.first << ":" << smallestSecond.second.size() << std::endl;
-
         huffmanUnTree.pop();
 
         codesTable.addBits(smallestFirst.second, 0);
@@ -67,7 +57,8 @@ void calculateCodesTable(const CountTable &countTable, CodesTable &codesTable)
     codesTable.reverseAllBits();
 }
 
-void archive(std::istream &in, std::ostream &out, CompressMode mode) {
+void archive(std::istream &in, std::ostream &out, CompressMode mode)
+{
     BitReader reader(in);
     BitWriter writer(out);
     CountTable countTable;
@@ -77,12 +68,18 @@ void archive(std::istream &in, std::ostream &out, CompressMode mode) {
 
     switch (mode) {
         case CompressMode::SAVE_TO_RAM:
-            reader.readAllData(inData);
-            countTable = countBytes(inData);
+            inData = reader.readAllData();
+            for (uint8_t byte : inData)
+                ++countTable[byte];
+
             break;
         case CompressMode::READ_TWICE:
+            while (!reader.eof())
+                ++countTable[reader.readUInt8()];
+
             break;
         case CompressMode::SAVE_TO_DISK:
+            // Not required
             break;
     }
 
@@ -95,28 +92,28 @@ void archive(std::istream &in, std::ostream &out, CompressMode mode) {
     writer.writeBits(codesTableAsBits);
 
     size_t newDataSizeBits = 0;
-    for (size_t byte = 0; byte < 256; ++byte) {
-        if (countTable[byte] > 0){
+    for (size_t byte = 0; byte < 256; ++byte)
+        if (countTable[byte] > 0)
             newDataSizeBits += countTable[byte] * codesTable.getCodeLength(byte);
-            std::cout << (char)byte << " : " << codesTable.data[byte] << std::endl;
-        }
-    }
 
     writer.writeUInt64(newDataSizeBits);
 
     switch (mode) {
         case CompressMode::SAVE_TO_RAM:
-            for (uint8_t byte : inData) {
+            for (uint8_t byte : inData)
                 writer.writeBits(codesTable.data[byte]);
-                //std::cout << (char)byte << " : " << codesTable.data[byte] << std::endl;
-            }
-
-            writer.flush();
 
             break;
         case CompressMode::READ_TWICE:
+            reader.reset();
+            while (!reader.eof())
+                writer.writeBits(codesTable.data[reader.readUInt8()]);
+
             break;
         case CompressMode::SAVE_TO_DISK:
+            // Not required
             break;
     }
+
+    writer.flush();
 }

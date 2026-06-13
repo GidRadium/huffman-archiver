@@ -90,7 +90,7 @@ void archive(std::istream &in, std::ostream &out, CompressMode mode) {
 
     Bits codesTableAsBits = codesTable.toBits();
 
-    writer.writeUInt32(codesTableAsBits.bitsCount);
+    writer.writeUInt32(codesTableAsBits.size());
 
     writer.writeBits(codesTableAsBits);
 

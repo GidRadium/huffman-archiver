@@ -19,11 +19,11 @@ std::unique_ptr<Node> buildTree(const CodesTable& codesTable)
 
     for (size_t byte = 0; byte < 256; ++byte) {
         const Bits& code = codesTable.data[byte];
-        if (code.bitsCount == 0) continue;
+        if (code.size() == 0) continue;
         std::cout << (char)byte << " : " << codesTable.data[byte] << std::endl;
 
         Node* current = root.get();
-        for (size_t i = 0; i < code.bitsCount; ++i) {
+        for (size_t i = 0; i < code.size(); ++i) {
             bool bit = code.bitAt(i);
             if (bit == 0) {
                 if (!current->left)
@@ -48,12 +48,11 @@ void unarchive(std::istream& in, std::ostream& out)
     BitWriter writer(out);
 
     uint32_t codesTableBitsCount = reader.readUInt32();
-    Bits codesTableAsBits;
-    reader.readBits(codesTableBitsCount, codesTableAsBits);
+    Bits codesTableAsBits = reader.readBits(codesTableBitsCount);
     CodesTable codesTable(codesTableAsBits);
     std::unique_ptr<Node> root = buildTree(codesTable);
-    Node* currentNode = root.get();
 
+    Node* currentNode = root.get();
     uint64_t inDataSizeBits = reader.readUInt64();
     uint64_t bitPos = 0;
     while (bitPos < inDataSizeBits) {

@@ -33,7 +33,7 @@ public:
     uint64_t readUInt64();
 
     void readAllData(std::vector<uint8_t> &inData);
-    void readBits(size_t bitsCount, Bits &bits);
+    Bits readBits(size_t bitsToRead);
 
     bool eof() const;
 

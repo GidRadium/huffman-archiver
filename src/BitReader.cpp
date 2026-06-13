@@ -110,44 +110,37 @@ uint64_t BitReader::readUInt64() {
     return value;
 }
 
-void BitReader::readBits(size_t bitsCount, Bits &bits) {
-    if (bitsCount == 0)
-        return;
+Bits BitReader::readBits(size_t bitsToRead) {
+    Bits result;
+    if (bitsToRead == 0)
+        return result;
 
-    size_t remaining = bitsCount;
+    size_t remaining = bitsToRead;
 
-    while (remaining > 0 && (bitPos & 7) == 0 && bitsRead - bitPos >= 8) {
-        size_t bytesAvailable = (bitsRead - bitPos) >> 3;
-        size_t bytesToCopy = std::min(bytesAvailable, remaining >> 3);
-        if (bytesToCopy == 0)
-            break;
-
-        const uint8_t* src = buffer.data() + (bitPos >> 3);
-        bits.bytes.insert(bits.bytes.end(), src, src + bytesToCopy);
-        bitPos += bytesToCopy << 3;
-        remaining -= bytesToCopy << 3;
-    }
-
-    uint8_t lastByte = 0;
-    int bitsInLastByte = 0;
     while (remaining > 0) {
-        if (bitsInLastByte == 8) {
-            bits.bytes.push_back(lastByte);
-            lastByte = 0;
-            bitsInLastByte = 0;
+        if (bitPos >= bitsRead) {
+            fillBuffer();
+            if (bitsRead == 0)
+                throw BitReaderEOFError("EOF by readBits");
         }
 
-        lastByte = uint8_t((lastByte << 1) | (readBit() ? 1 : 0));
-        ++bitsInLastByte;
-        --remaining;
+        if ((bitPos & 7) == 0 && remaining >= 8 && (bitsRead - bitPos) >= 8) {
+            size_t bytesAvailable = (bitsRead - bitPos) >> 3;
+            size_t bytesToCopy = std::min(bytesAvailable, remaining >> 3);
+            Bits chunk(buffer.data() + (bitPos >> 3), bytesToCopy);
+
+            if (result.size() == 0) result = chunk;
+            else result.append(chunk);
+
+            bitPos += bytesToCopy << 3;
+            remaining -= bytesToCopy << 3;
+        } else {
+            result.addBit(readBit());
+            --remaining;
+        }
     }
 
-    if (bitsInLastByte > 0) {
-        lastByte <<= (8 - bitsInLastByte);
-        bits.bytes.push_back(lastByte);
-    }
-
-    bits.bitsCount += bitsCount;
+    return result;
 }
 
 bool BitReader::eof() const {

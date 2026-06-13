@@ -116,17 +116,17 @@ void BitWriter::writeAllData(const std::vector<uint8_t>& data) {
 }
 
 void BitWriter::writeBits(const Bits& bits) {
-    size_t remaining = bits.bitsCount;
+    size_t remaining = bits.size();
 
     size_t bytePos = 0;
     while (remaining >= 8) {
-        writeUInt8(bits.bytes[bytePos]);
+        writeUInt8(bits.byteAt(bytePos));
         ++bytePos;
         remaining -= 8;
     }
 
     if (remaining > 0) {
-        uint8_t lastByte = bits.bytes[bytePos];
+        uint8_t lastByte = bits.byteAt(bytePos);
 
         for (size_t i = 0; i < remaining; ++i)
             writeBit((lastByte >> (7 - i)) & 1);

@@ -167,5 +167,4 @@ void BitReader::reset()
 
     bitPos = 0;
     bitsRead = 0;
-    buffer.clear();
 }

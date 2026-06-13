@@ -17,7 +17,7 @@ int main() {
         return 1;
     }
 
-    archive(inputFile, compressedFile, CompressMode::SAVE_TO_RAM);
+    archive(inputFile, compressedFile, CompressMode::READ_TWICE);
     inputFile.close();
     compressedFile.close();
 

@@ -10,7 +10,6 @@ add_library(huffman STATIC
     src/BitReader.cpp
     src/BitWriter.cpp
     src/CodesTable.cpp
-    src/CountTable.cpp
     src/archive.cpp
     src/unarchive.cpp
 )

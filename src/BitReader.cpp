@@ -23,7 +23,7 @@ void BitReader::fillBuffer()
 {
     in_.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
     if (in_.bad())
-        throw BitReaderIOError("I/O error while reading from stream");
+        throw BitReaderIOError("BitReader: I/O error while reading from stream");
 
     bitsRead = size_t(in_.gcount()) << 3;
     bitPos = 0;
@@ -163,7 +163,7 @@ void BitReader::reset()
 {
     in_.clear();
     if (!in_.seekg(0, std::ios::beg))
-        throw BitReaderIOError("Failed to seek to beginning of stream");
+        throw BitReaderIOError("BitReader::reset: Failed to seek to beginning of stream");
 
     bitPos = 0;
     bitsRead = 0;

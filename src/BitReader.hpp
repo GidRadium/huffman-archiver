@@ -22,6 +22,7 @@ public:
     explicit BitReaderIOError(const std::string& msg) : BitReaderException(msg) {}
 };
 
+// Обёртка над std::ostream для побитового чтения данных.
 class BitReader {
 public:
     // Инициализирует потоком данных. Устанавливает размер буфера (64 МБ по умолчанию)

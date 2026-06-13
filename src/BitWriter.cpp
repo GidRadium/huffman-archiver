@@ -1,19 +1,22 @@
 #include "BitWriter.hpp"
 
 BitWriter::BitWriter(std::ostream& out, size_t bufferSizeBytes)
-    : out_(out), bufferSizeBytes_(bufferSizeBytes), bitPos(0) {
+    : out_(out), bufferSizeBytes_(bufferSizeBytes), bitPos(0)
+{
     buffer.clear();
     buffer.resize(bufferSizeBytes, 0);
 }
 
-BitWriter::~BitWriter() {
+BitWriter::~BitWriter()
+{
     try {
         flush();
     }
     catch (...) {}
 }
 
-void BitWriter::flushBuffer() {
+void BitWriter::flushBuffer()
+{
     size_t bytesToWrite = (bitPos + 7) >> 3;
     if (bytesToWrite == 0)
         return;
@@ -21,13 +24,14 @@ void BitWriter::flushBuffer() {
     out_.write(reinterpret_cast<const char*>(buffer.data()), bytesToWrite);
 
     if (out_.bad())
-        throw BitWriterIOError("I/O error while writing to stream");
+        throw BitWriterIOError("BitWriter: I/O error while writing to stream");
 
     std::fill(buffer.begin(), buffer.begin() + bytesToWrite, 0);
     bitPos = 0;
 }
 
-void BitWriter::writeBit(bool bit) {
+void BitWriter::writeBit(bool bit)
+{
     if (bitPos >= bufferSizeBytes_ << 3)
         flushBuffer();
 
@@ -37,7 +41,8 @@ void BitWriter::writeBit(bool bit) {
     ++bitPos;
 }
 
-void BitWriter::writeUInt8(uint8_t value) {
+void BitWriter::writeUInt8(uint8_t value)
+{
     if ((bitPos & 7) == 0 && bitPos + 8 <= (bufferSizeBytes_ << 3)) {
         buffer[bitPos >> 3] = value;
         bitPos += 8;
@@ -49,7 +54,8 @@ void BitWriter::writeUInt8(uint8_t value) {
         writeBit((value >> i) & 1);
 }
 
-void BitWriter::writeUInt16(uint16_t value) {
+void BitWriter::writeUInt16(uint16_t value)
+{
     if ((bitPos & 7) == 0 && bitPos + 16 <= (bufferSizeBytes_ << 3)) {
         size_t bytePos = bitPos >> 3;
 
@@ -64,7 +70,8 @@ void BitWriter::writeUInt16(uint16_t value) {
         writeBit((value >> i) & 1);
 }
 
-void BitWriter::writeUInt32(uint32_t value) {
+void BitWriter::writeUInt32(uint32_t value)
+{
     if ((bitPos & 7) == 0 && bitPos + 32 <= (bufferSizeBytes_ << 3)) {
         size_t bytePos = bitPos >> 3;
 
@@ -81,7 +88,8 @@ void BitWriter::writeUInt32(uint32_t value) {
         writeBit((value >> i) & 1);
 }
 
-void BitWriter::writeUInt64(uint64_t value) {
+void BitWriter::writeUInt64(uint64_t value)
+{
     if ((bitPos & 7) == 0 && bitPos + 64 <= (bufferSizeBytes_ << 3)) {
         size_t bytePos = bitPos >> 3;
 
@@ -102,7 +110,8 @@ void BitWriter::writeUInt64(uint64_t value) {
         writeBit((value >> i) & 1);
 }
 
-void BitWriter::writeAllData(const std::vector<uint8_t>& data) {
+void BitWriter::writeAllData(const std::vector<uint8_t>& data)
+{
     if (data.empty())
         return;
 
@@ -115,7 +124,8 @@ void BitWriter::writeAllData(const std::vector<uint8_t>& data) {
         throw BitWriterIOError("I/O error while writing to stream");
 }
 
-void BitWriter::writeBits(const Bits& bits) {
+void BitWriter::writeBits(const Bits& bits)
+{
     size_t remaining = bits.size();
 
     size_t bytePos = 0;
@@ -133,10 +143,11 @@ void BitWriter::writeBits(const Bits& bits) {
     }
 }
 
-void BitWriter::flush() {
+void BitWriter::flush()
+{
     flushBuffer();
     out_.flush();
 
     if (out_.bad())
-        throw BitWriterIOError("I/O error while flushing stream");
+        throw BitWriterIOError("BitWriter::flush: I/O error while flushing stream");
 }

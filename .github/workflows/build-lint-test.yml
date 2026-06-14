@@ -1,11 +1,11 @@
-name: Lint test
+name: Lint and test
 
 on:
   - push
   - pull_request
 
 jobs:
-  build-lint-test:
+  build-lint-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -15,7 +15,7 @@ jobs:
           find . -path ./build -prune -o -type f \( -name '*.cpp' -o -name '*.hpp' \) -print | xargs clang-format-18 --style=file --dry-run -Werror
 
       - name: Configure
-        run: cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        run: cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_TESTS=ON
 
       - name: Build
         run: cmake --build build

@@ -1,6 +1,9 @@
 # huffman-archiver
 
-[![Tests and sanitizers](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-lint-test-sanz-doc.yml/badge.svg)](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-lint-test-sanz-doc.yml)
+[![Lint and test](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-lint-test.yml/badge.svg)](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-lint-test.yml)
+[![Sanitize test](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-sanitize-test.yml/badge.svg)](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-sanitize-test.yml)
+
+Console archiver based on the Huffman algorithm. Works with files of any size. Can compress either in RAM or after two passes of the file.
 
 ## Install
 `git clone https://github.com/GidRadium/huffman-archiver.git`
@@ -8,11 +11,9 @@
 ## Build
 `cd huffman-archiver`
 
-`rm -rf build`
+`cmake -B build-release -DCMAKE_BUILD_TYPE=Release`
 
-`cmake -B build -S .`
-
-`cmake --build build`
+`cmake --build build-release -j$(nproc)`
 
 ## Usage
 Help:

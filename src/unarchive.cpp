@@ -1,3 +1,8 @@
+/**
+ * @file src/unarchive.cpp
+ * @brief Implementation of Huffman decompression.
+ */
+
 #include "unarchive.hpp"
 #include "BitReader.hpp"
 #include "BitWriter.hpp"

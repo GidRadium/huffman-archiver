@@ -1,3 +1,8 @@
+/**
+ * @file src/BitReader.cpp
+ * @brief Implementation of the BitReader class.
+ */
+
 #include "BitReader.hpp"
 
 BitReader::BitReader(std::istream& in, size_t bufferSizeBytes)

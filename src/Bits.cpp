@@ -1,3 +1,8 @@
+/**
+ * @file src/Bits.cpp
+ * @brief Implementation of the Bits class.
+ */
+
 #include "Bits.hpp"
 
 Bits::Bits() = default;

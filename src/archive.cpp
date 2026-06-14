@@ -1,3 +1,8 @@
+/**
+ * @file src/archive.cpp
+ * @brief Implementation of Huffman compression.
+ */
+
 #include "archive.hpp"
 #include "BitReader.hpp"
 #include "BitWriter.hpp"

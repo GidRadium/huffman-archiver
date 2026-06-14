@@ -1,3 +1,8 @@
+/**
+ * @file src/BitWriter.cpp
+ * @brief Implementation of the BitWriter class.
+ */
+
 #include "BitWriter.hpp"
 
 BitWriter::BitWriter(std::ostream& out, size_t bufferSizeBytes)

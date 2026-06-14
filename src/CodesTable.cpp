@@ -1,3 +1,8 @@
+/**
+ * @file src/CodesTable.cpp
+ * @brief Implementation of the CodesTable class.
+ */
+
 #include "CodesTable.hpp"
 
 CodesTable::CodesTable() = default;

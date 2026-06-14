@@ -46,3 +46,12 @@ Decompress:
 `cmake --build build-san`
 
 `ctest --test-dir build-san`
+
+## Research
+`cd research`
+
+`uv venv`
+
+`source .venv/bin/activate`
+
+`uv sync`

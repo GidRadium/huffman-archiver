@@ -3,6 +3,7 @@
 #include "archive.hpp"
 #include "unarchive.hpp"
 
+#include <stdexcept>
 #include <string.h>
 #include <iostream>
 #include <fstream>
@@ -84,8 +85,8 @@ Options parseArguments(int argc, char* argv[])
                 options.mode = CompressMode::SAVE_TO_RAM;
             } else if (mode == "twice" || mode == "read_twice") {
                 options.mode = CompressMode::READ_TWICE;
-            } else if (mode == "disk" || mode == "save_to_disk") {
-                options.mode = CompressMode::SAVE_TO_DISK;
+            //} else if (mode == "disk" || mode == "save_to_disk") {
+                //options.mode = CompressMode::SAVE_TO_DISK;
             } else {
                 options.valid = false;
                 options.error = "Unknown mode: " + mode + ". Available: ram, twice, disk.";
@@ -118,8 +119,8 @@ void printUsage(const char* executableName)
         << "  -m, --mode <mode> = Set compression mode (default: twice)\n"
         << "                      Modes:\n"
         << "                      ram (load full input file to RAM),\n"
-        << "                      twice (read input file two times),\n"
-        << "                      disk (use disk to temporary save input data).\n"
+        << "                      twice (read input file two times).\n"
+        //<< "                      disk (use disk to temporary save input data).\n"
         << "  -h, -H, -help\n"
         << "  --help            = Print usage information and exit.\n";
 }
@@ -163,13 +164,17 @@ int runConsoleApp(int argc, char* argv[])
     }
 
     try {
-        if (options.compress) {
+        if (options.compress)
             archive(inputFile, outputFile, options.mode);
-        } else {
+        else
             unarchive(inputFile, outputFile);
-        }
+
+    } catch (const HuffmanUnArchiveBrokenDataError& e) {
+        std::cerr << "Error: " << options.input << " is broken or not supported. " << e.what() << std::endl;
+    } catch (const std::runtime_error& e) {
+        std::cerr << e.what() << std::endl;
     } catch (...) {
-        std::cerr << "Error: unexpected error." << ".\n";
+        std::cerr << "Error: unexpected error." << std::endl;
     }
 
     inputFile.close();

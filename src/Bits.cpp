@@ -1,5 +1,6 @@
 #include "Bits.hpp"
 
+Bits::Bits() = default;
 
 Bits::Bits(const uint8_t* data, size_t numBytes)
     : bytes(data, data + numBytes), bitsCount(numBytes * 8) {}

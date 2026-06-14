@@ -13,13 +13,18 @@ public:
     explicit CodesTableException(const std::string& msg) : std::runtime_error(msg) {}
 };
 
+class CodesTableIncorrectBitsData : public CodesTableException {
+public:
+    explicit CodesTableIncorrectBitsData(const std::string& msg) : CodesTableException(msg) {}
+};
+
 // Таблица кодов символов.
 class CodesTable {
 public:
     // Конструктор по умолчанию.
     CodesTable();
 
-    // Десеариализирует и инициализирует полученными кодами.
+    // Десеариализирует и инициализирует полученными кодами. CodesTableIncorrectBitsData
     CodesTable(const Bits& bits);
 
     // Сериализирует в последовательность бит.

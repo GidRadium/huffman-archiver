@@ -21,7 +21,7 @@ CodesTable::CodesTable(const Bits& bits)
             pos += length;
         }
     } catch (const std::out_of_range& e) {
-        throw CodesTableException(std::string("CodesTable::CodesTable: Bits data is incorrect. ") + e.what());
+        throw CodesTableIncorrectBitsData(std::string("CodesTable::CodesTable: Bits data is incorrect. ") + e.what());
     }
 }
 

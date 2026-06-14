@@ -5,6 +5,19 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # For .clangd
 
+# Sanitizers
+option(ENABLE_SANITIZERS "Enable Address and Undefined Behavior sanitizers" OFF)
+
+if(ENABLE_SANITIZERS)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address,undefined)
+  else()
+    message(WARNING "Sanitizers are not supported for compiler ${CMAKE_CXX_COMPILER_ID}")
+  endif()
+endif()
+
+# Library
 add_library(huffman STATIC
     src/Bits.cpp
     src/BitReader.cpp
@@ -17,6 +30,7 @@ add_library(huffman STATIC
 target_include_directories(huffman PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_include_directories(huffman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/huffman)
 
+# App
 add_executable(harch-cli
     app/main.cpp
     app/app.cpp

@@ -28,3 +28,11 @@ Run:
 ## Lint
 
 `find . -path './build' -prune -o -type f \( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' -o -name '*.c' \) -print | xargs clang-format -i`
+
+## Sanitize
+
+`cmake -B build-san -S . -DENABLE_SANITIZERS=ON`
+
+`cmake --build build-san`
+
+`ctest --test-dir build-san`

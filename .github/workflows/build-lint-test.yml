@@ -1,4 +1,4 @@
-name: Build lint test
+name: Lint test
 
 on:
   - push

@@ -1,0 +1,20 @@
+name: Sanitize test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  sanitize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Configure
+        run: cmake -B build-san -S . -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZERS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Build
+        run: cmake --build build-san
+
+      - name: Run tests with sanitizers
+        run: ctest --test-dir build-san --output-on-failure

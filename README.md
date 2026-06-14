@@ -1,6 +1,13 @@
 # huffman-archiver
 
+[![Tests and sanitizers](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-lint-test-sanz-doc.yml/badge.svg)](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-lint-test-sanz-doc.yml)
+
+## Install
+`git clone https://github.com/GidRadium/huffman-archiver.git`
+
 ## Build
+`cd huffman-archiver`
+
 `rm -rf build`
 
 `cmake -B build -S .`

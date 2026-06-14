@@ -22,16 +22,18 @@ Help:
 
 Compress:
 
-`./build/harch-cli c data.txt data.txt.harch`
+`./build/harch-cli c <input-file> <output-file>`
 
 Decompress:
 
-`./build/harch-cli d data.txt.harch data_reharch.txt`
+`./build/harch-cli d <input-file> <output-file>`
 
 ## Test
-Run:
+`cmake -B build-debug -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON`
 
-`cd build && ctest && cd ..`
+`cmake --build build-debug -j $(nproc)`
+
+`(cd build-debug && ctest --output-on-failure)`
 
 ## Lint
 

@@ -71,3 +71,11 @@ Testing/
 # custom
 .clangd
 .zed
+
+# research data files
+research/archives*
+research/datasets*
+research/restored*
+
+# uv
+research/uv.lock

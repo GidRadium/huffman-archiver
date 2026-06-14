@@ -22,8 +22,7 @@ void calculateCodesTable(const CountTable& countTable, CodesTable& codesTable)
     std::priority_queue<
         std::pair<size_t, std::list<uint8_t>>,
         std::vector<std::pair<size_t, std::list<uint8_t>>>,
-        std::greater<> // прозрачный компаратор
-        >
+        std::greater<>>
         huffmanUnTree;
 
     for (size_t byte = 0; byte < 256; ++byte)
@@ -76,18 +75,21 @@ void archive(std::istream& in, std::ostream& out, CompressMode mode)
 
             break;
         case CompressMode::ReadTwice:
-            while (!reader.eof())
-                ++countTable[reader.readUInt8()];
+            try {
+                while (!reader.eof())
+                    ++countTable[reader.readUInt8()];
+            } catch (const BitReaderEOFError& e) { // if buffer ends with end of file
+            }
 
             break;
             // case CompressMode::SAVE_TO_DISK:
             //  Not required
             // break;
         }
-    } catch (const BitReaderIOError&) {
-        throw HuffmanArchiveIStreamError("archive(): Read in stream data error.");
-    } catch (const BitReaderEOFError&) {
-        throw HuffmanArchiveIStreamError("archive(): Read in stream unexpected EOF.");
+    } catch (const BitReaderIOError& e) {
+        throw HuffmanArchiveIStreamError(std::string("archive(): Read in stream data error. ") + e.what());
+    } catch (const BitReaderEOFError& e) {
+        throw HuffmanArchiveIStreamError(std::string("archive(): Read in stream unexpected EOF. ") + e.what());
     }
 
     calculateCodesTable(countTable, codesTable);
@@ -110,27 +112,27 @@ void archive(std::istream& in, std::ostream& out, CompressMode mode)
         try {
             for (uint8_t byte : inData)
                 writer.writeBits(codesTable.getCode(byte));
-        } catch (const HuffmanArchiveOStreamError&) {
-            throw HuffmanArchiveOStreamError("archive(): Write out stream error.");
+        } catch (const HuffmanArchiveOStreamError& e) {
+            throw HuffmanArchiveOStreamError(std::string("archive(): Write out stream error. ") + e.what());
         }
 
         break;
     case CompressMode::ReadTwice:
         try {
             reader.reset();
-        } catch (const BitReaderIOError&) {
-            throw HuffmanArchiveIStreamError("archive(): Can't reset in stream to read twice.");
+        } catch (const BitReaderIOError& e) {
+            throw HuffmanArchiveIStreamError(std::string("archive(): Can't reset in stream to read twice. ") + e.what());
         }
 
         try {
             while (!reader.eof())
                 writer.writeBits(codesTable.getCode(reader.readUInt8()));
-        } catch (const BitReaderIOError&) {
-            throw HuffmanArchiveIStreamError("archive(): Read in stream data error.");
-        } catch (const BitReaderEOFError&) {
-            throw HuffmanArchiveIStreamError("archive(): Read in stream unexpected EOF.");
-        } catch (const BitWriterIOError&) {
-            throw HuffmanArchiveOStreamError("archive(): Write out stream error.");
+        } catch (const BitReaderIOError& e) {
+            throw HuffmanArchiveIStreamError(std::string("archive(): Read in stream data error. ") + e.what());
+        } catch (const BitReaderEOFError& e) {
+            throw HuffmanArchiveIStreamError(std::string("archive(): Read in stream unexpected EOF. ") + e.what());
+        } catch (const BitWriterIOError& e) {
+            throw HuffmanArchiveOStreamError(std::string("archive(): Write out stream error. ") + e.what());
         }
 
         break;
@@ -141,7 +143,7 @@ void archive(std::istream& in, std::ostream& out, CompressMode mode)
 
     try {
         writer.flush();
-    } catch (const BitWriterIOError&) {
-        throw HuffmanArchiveOStreamError("archive(): flush data to ostream error.");
+    } catch (const BitWriterIOError& e) {
+        throw HuffmanArchiveOStreamError(std::string("archive(): flush data to ostream error. ") + e.what());
     }
 }

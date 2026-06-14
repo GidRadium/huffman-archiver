@@ -6,7 +6,6 @@
 #include <string>
 #include <cstdint>
 
-
 TEST(BitReaderTest, ReadBitBasic) {
     std::istringstream in(std::string(1, static_cast<char>(0b10000000)));
     BitReader reader(in);

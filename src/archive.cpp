@@ -29,6 +29,12 @@ void calculateCodesTable(const CountTable &countTable, CodesTable &codesTable)
         if (countTable[byte] > 0)
             huffmanUnTree.push(std::make_pair(countTable[byte], std::list<uint8_t>(1, byte)));
 
+    if (huffmanUnTree.size() == 1) {
+        std::pair<size_t, std::list<uint8_t>> onlyOneSymbol = huffmanUnTree.top();
+        huffmanUnTree.pop();
+        codesTable.addBits(onlyOneSymbol.second, 0);
+    }
+
     while (!huffmanUnTree.empty()) {
         std::pair<size_t, std::list<uint8_t>> smallestFirst = huffmanUnTree.top();
         huffmanUnTree.pop();

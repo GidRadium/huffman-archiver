@@ -1,19 +1,20 @@
 #include <gtest/gtest.h>
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
 
 #include "Bits.hpp"
 
-TEST(BitsTest, Empty) {
+TEST(BitsTest, Empty)
+{
     Bits b;
     EXPECT_EQ(b.size(), 0u);
-    EXPECT_THROW(b.bitAt(0), std::out_of_range);
-    EXPECT_THROW(b.byteAt(0), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(b.bitAt(0)), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(b.byteAt(0)), std::out_of_range);
 
     Bits s = b.slice(0, 0);
     EXPECT_EQ(s.size(), 0u);
 
-    EXPECT_THROW(b.toByte(0), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(b.toByte(0)), std::out_of_range);
 
     b.reverse();
     EXPECT_EQ(b.size(), 0u);
@@ -22,7 +23,8 @@ TEST(BitsTest, Empty) {
     EXPECT_EQ(oss.str(), "");
 }
 
-TEST(BitsTest, SingleBit) {
+TEST(BitsTest, SingleBit)
+{
     Bits b;
     b.addBit(true);
     EXPECT_EQ(b.size(), 1u);
@@ -32,8 +34,9 @@ TEST(BitsTest, SingleBit) {
     EXPECT_FALSE(b.bitAt(1));
 }
 
-TEST(BitsTest, FromByte) {
-    const uint8_t byte = 0b10101010;
+TEST(BitsTest, FromByte)
+{
+    uint8_t byte = 0b10101010;
     Bits b(byte);
     EXPECT_EQ(b.size(), 8u);
 
@@ -49,17 +52,21 @@ TEST(BitsTest, FromByte) {
     EXPECT_EQ(b.toByte(0), byte);
 }
 
-TEST(BitsTest, FromBytes) {
-    const uint8_t data[] = {0b11111111, 0b00000000};
+TEST(BitsTest, FromBytes)
+{
+    uint8_t data[] = { 0b11111111, 0b00000000 };
     Bits b(data, 2);
     EXPECT_EQ(b.size(), 16u);
-    for (size_t i = 0; i < 8; ++i) EXPECT_TRUE(b.bitAt(i));
-    for (size_t i = 8; i < 16; ++i) EXPECT_FALSE(b.bitAt(i));
+    for (size_t i = 0; i < 8; ++i)
+        EXPECT_TRUE(b.bitAt(i));
+    for (size_t i = 8; i < 16; ++i)
+        EXPECT_FALSE(b.bitAt(i));
     EXPECT_EQ(b.byteAt(0), 0b11111111);
     EXPECT_EQ(b.byteAt(1), 0b00000000);
 }
 
-TEST(BitsTest, AddBitsFullByte) {
+TEST(BitsTest, AddBitsFullByte)
+{
     Bits b;
     b.addBit(true);
     b.addBit(false);
@@ -75,22 +82,25 @@ TEST(BitsTest, AddBitsFullByte) {
     EXPECT_FALSE(b.bitAt(7));
 }
 
-TEST(BitsTest, BitAtOutOfRange) {
+TEST(BitsTest, BitAtOutOfRange)
+{
     Bits b;
     b.addBit(true);
-    EXPECT_THROW(b.bitAt(1), std::out_of_range);
-    EXPECT_THROW(b.bitAt(100), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(b.bitAt(1)), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(b.bitAt(100)), std::out_of_range);
 }
 
-TEST(BitsTest, ByteAtOutOfRange) {
-    const uint8_t data[] = {0b10101010, 0b10111011};
+TEST(BitsTest, ByteAtOutOfRange)
+{
+    uint8_t data[] = { 0b10101010, 0b10111011 };
     Bits b(data, 2);
-    EXPECT_NO_THROW(b.byteAt(0));
-    EXPECT_NO_THROW(b.byteAt(1));
-    EXPECT_THROW(b.byteAt(2), std::out_of_range);
+    EXPECT_NO_THROW(static_cast<void>(b.byteAt(0)));
+    EXPECT_NO_THROW(static_cast<void>(b.byteAt(1)));
+    EXPECT_THROW(static_cast<void>(b.byteAt(2)), std::out_of_range);
 }
 
-TEST(BitsTest, Append) {
+TEST(BitsTest, Append)
+{
     Bits a;
     a.addBit(true);
     a.addBit(false);
@@ -109,8 +119,9 @@ TEST(BitsTest, Append) {
     EXPECT_FALSE(a.bitAt(4));
 }
 
-TEST(BitsTest, Slice) {
-    const uint8_t data[] = {0b11001100, 0b11110000};
+TEST(BitsTest, Slice)
+{
+    uint8_t data[] = { 0b11001100, 0b11110000 };
     Bits b(data, 2);
 
     Bits firstByte = b.slice(0, 8);
@@ -122,7 +133,8 @@ TEST(BitsTest, Slice) {
     EXPECT_EQ(mid.toByte(0), 0b11001111);
 }
 
-TEST(BitsTest, Reverse) {
+TEST(BitsTest, Reverse)
+{
     Bits b;
     b.addBit(true);
     b.addBit(false);
@@ -134,23 +146,26 @@ TEST(BitsTest, Reverse) {
     EXPECT_TRUE(b.bitAt(2));
 }
 
-TEST(BitsTest, ToByte) {
-    const uint8_t data[] = {0b00001111, 0b10101010};
+TEST(BitsTest, ToByte)
+{
+    uint8_t data[] = { 0b00001111, 0b10101010 };
     Bits b(data, 2);
     EXPECT_EQ(b.toByte(0), 0b00001111);
     EXPECT_EQ(b.toByte(2), 0b00111110);
 }
 
-TEST(BitsTest, ToByteOutOfRange) {
-    Bits b(uint8_t{0b11111111});
-    EXPECT_NO_THROW(b.toByte(0));
-    EXPECT_THROW(b.toByte(1), std::out_of_range);
+TEST(BitsTest, ToByteOutOfRange)
+{
+    Bits b(uint8_t { 0b11111111 });
+    EXPECT_NO_THROW(static_cast<void>(b.toByte(0)));
+    EXPECT_THROW(static_cast<void>(b.toByte(1)), std::out_of_range);
     b.addBit(false);
-    EXPECT_NO_THROW(b.toByte(1));
-    EXPECT_THROW(b.toByte(2), std::out_of_range);
+    EXPECT_NO_THROW(static_cast<void>(b.toByte(1)));
+    EXPECT_THROW(static_cast<void>(b.toByte(2)), std::out_of_range);
 }
 
-TEST(BitsTest, Output) {
+TEST(BitsTest, Output)
+{
     Bits b;
     b.addBit(true);
     b.addBit(false);

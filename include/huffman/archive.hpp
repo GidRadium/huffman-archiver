@@ -12,8 +12,8 @@
  * @brief Compression mode for archive().
  */
 enum class CompressMode {
-    SAVE_TO_RAM,   ///< Read entire input into memory before compressing.
-    READ_TWICE     ///< Read input twice (resets stream between passes).
+    SaveToRam, ///< Read entire input into memory before compressing.
+    ReadTwice ///< Read input twice (resets stream between passes).
 };
 
 /**
@@ -21,7 +21,10 @@ enum class CompressMode {
  */
 class HuffmanArchiveException : public std::runtime_error {
 public:
-    explicit HuffmanArchiveException(const std::string& msg) : std::runtime_error(msg) {}
+    explicit HuffmanArchiveException(const std::string& msg)
+        : std::runtime_error(msg)
+    {
+    }
 };
 
 /**
@@ -29,7 +32,10 @@ public:
  */
 class HuffmanArchiveIStreamError : public HuffmanArchiveException {
 public:
-    explicit HuffmanArchiveIStreamError(const std::string& msg) : HuffmanArchiveException(msg) {}
+    explicit HuffmanArchiveIStreamError(const std::string& msg)
+        : HuffmanArchiveException(msg)
+    {
+    }
 };
 
 /**
@@ -37,7 +43,10 @@ public:
  */
 class HuffmanArchiveOStreamError : public HuffmanArchiveException {
 public:
-    explicit HuffmanArchiveOStreamError(const std::string& msg) : HuffmanArchiveException(msg) {}
+    explicit HuffmanArchiveOStreamError(const std::string& msg)
+        : HuffmanArchiveException(msg)
+    {
+    }
 };
 
 /**

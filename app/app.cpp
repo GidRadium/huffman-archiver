@@ -8,24 +8,23 @@
 #include "archive.hpp"
 #include "unarchive.hpp"
 
-#include <stdexcept>
-#include <string.h>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <stdexcept>
+#include <string>
 
 /**
  * @brief Parsed command-line options.
  */
-struct Options
-{
-    bool compress = false;        ///< Perform compression.
-    bool decompress = false;      ///< Perform decompression.
-    std::string input;            ///< Input file path.
-    std::string output;           ///< Output file path.
-    CompressMode mode = CompressMode::READ_TWICE; ///< Compression mode.
-    bool show_help = false;       ///< Print help and exit.
-    bool valid = true;            ///< Were options parsed successfully?
-    std::string error;            ///< Error message if not valid.
+struct Options {
+    bool compress = false; ///< Perform compression.
+    bool decompress = false; ///< Perform decompression.
+    std::string input; ///< Input file path.
+    std::string output; ///< Output file path.
+    CompressMode mode = CompressMode::ReadTwice; ///< Compression mode.
+    bool show_help = false; ///< Print help and exit.
+    bool valid = true; ///< Were options parsed successfully?
+    std::string error; ///< Error message if not valid.
 };
 
 /**
@@ -89,11 +88,11 @@ Options parseArguments(int argc, char* argv[])
             std::string mode = argv[i + 1];
             ++i;
             if (mode == "ram" || mode == "save_to_ram") {
-                options.mode = CompressMode::SAVE_TO_RAM;
+                options.mode = CompressMode::SaveToRam;
             } else if (mode == "twice" || mode == "read_twice") {
-                options.mode = CompressMode::READ_TWICE;
-            //} else if (mode == "disk" || mode == "save_to_disk") {
-            //    options.mode = CompressMode::SAVE_TO_DISK;
+                options.mode = CompressMode::ReadTwice;
+                //} else if (mode == "disk" || mode == "save_to_disk") {
+                //    options.mode = CompressMode::SAVE_TO_DISK;
             } else {
                 options.valid = false;
                 options.error = "Unknown mode: " + mode + ". Available: ram, twice, disk.";
@@ -120,18 +119,18 @@ Options parseArguments(int argc, char* argv[])
 void printUsage(const char* executableName)
 {
     std::cerr << "Usage\n\n"
-        << "  " << executableName << " <command> <input> <output> [options]\n\n"
-        << "Commands\n\n"
-        << "  compress (c)      = Compress input to output\n"
-        << "  decompress (d)    = Decompress input to output\n\n"
-        << "Options\n\n"
-        << "  -m, --mode <mode> = Set compression mode (default: twice)\n"
-        << "                      Modes:\n"
-        << "                      ram (load full input file to RAM),\n"
-        << "                      twice (read input file two times).\n"
-        //<< "                      disk (use disk to temporary save input data).\n"
-        << "  -h, -H, -help\n"
-        << "  --help            = Print usage information and exit.\n";
+              << "  " << executableName << " <command> <input> <output> [options]\n\n"
+              << "Commands\n\n"
+              << "  compress (c)      = Compress input to output\n"
+              << "  decompress (d)    = Decompress input to output\n\n"
+              << "Options\n\n"
+              << "  -m, --mode <mode> = Set compression mode (default: twice)\n"
+              << "                      Modes:\n"
+              << "                      ram (load full input file to RAM),\n"
+              << "                      twice (read input file two times).\n"
+              //<< "                      disk (use disk to temporary save input data).\n"
+              << "  -h, -H, -help\n"
+              << "  --help            = Print usage information and exit.\n";
 }
 
 /**
@@ -149,7 +148,7 @@ int runConsoleApp(int argc, char* argv[])
 
     if (!options.valid) {
         std::cerr << "Error: " << options.error << '\n'
-            << "Specify --help for usage.\n";
+                  << "Specify --help for usage.\n";
         return 1;
     }
 

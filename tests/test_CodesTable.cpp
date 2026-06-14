@@ -1,17 +1,19 @@
-#include <gtest/gtest.h>
-#include "CodesTable.hpp"
 #include "Bits.hpp"
-#include <list>
+#include "CodesTable.hpp"
 #include <cstdint>
+#include <gtest/gtest.h>
+#include <list>
 
-TEST(CodesTableEmpty, DefaultTable) {
+TEST(CodesTableEmpty, DefaultTable)
+{
     CodesTable ct;
     for (int i = 0; i < 256; ++i) {
         EXPECT_EQ(ct.getCodeLength(static_cast<uint8_t>(i)), 0u);
     }
 }
 
-TEST(CodesTableEmpty, SerializeEmpty) {
+TEST(CodesTableEmpty, SerializeEmpty)
+{
     CodesTable ct;
     Bits bits = ct.toBits();
     EXPECT_EQ(bits.size(), 8u);
@@ -19,11 +21,12 @@ TEST(CodesTableEmpty, SerializeEmpty) {
         EXPECT_FALSE(bits.bitAt(i));
 }
 
-TEST(CodesTableAddBits, BuildAndCheck) {
+TEST(CodesTableAddBits, BuildAndCheck)
+{
     CodesTable ct;
-    std::list<uint8_t> syms = {'A', 'B'};
+    std::list<uint8_t> syms = { 'A', 'B' };
     ct.addBits(syms, true);
-    ct.addBits({'A'}, false);
+    ct.addBits({ 'A' }, false);
     EXPECT_EQ(ct.getCodeLength('A'), 2u);
     EXPECT_EQ(ct.getCodeLength('B'), 1u);
     const Bits& codeA = ct.getCode('A');
@@ -33,11 +36,12 @@ TEST(CodesTableAddBits, BuildAndCheck) {
     EXPECT_TRUE(codeB.bitAt(0));
 }
 
-TEST(CodesTableRoundTrip, ToBitsAndBack) {
+TEST(CodesTableRoundTrip, ToBitsAndBack)
+{
     CodesTable ct1;
-    ct1.addBits({'X'}, true);
-    ct1.addBits({'X'}, false);
-    ct1.addBits({'X'}, true);
+    ct1.addBits({ 'X' }, true);
+    ct1.addBits({ 'X' }, false);
+    ct1.addBits({ 'X' }, true);
     Bits serialized = ct1.toBits();
     CodesTable ct2(serialized);
     EXPECT_EQ(ct2.getCodeLength('X'), 3u);
@@ -47,17 +51,19 @@ TEST(CodesTableRoundTrip, ToBitsAndBack) {
     EXPECT_TRUE(code.bitAt(2));
 }
 
-TEST(CodesTableDeserializeError, IncompleteData) {
+TEST(CodesTableDeserializeError, IncompleteData)
+{
     Bits bits;
     for (int i = 0; i < 8; ++i)
         bits.addBit(i == 7);
     EXPECT_THROW({ CodesTable ct(bits); }, CodesTableIncorrectBitsData);
 }
 
-TEST(CodesTableReverseBits, ReversesAllCodes) {
+TEST(CodesTableReverseBits, ReversesAllCodes)
+{
     CodesTable ct;
-    ct.addBits({'P'}, true);
-    ct.addBits({'P'}, false);
+    ct.addBits({ 'P' }, true);
+    ct.addBits({ 'P' }, false);
     ct.reverseAllBits();
     const Bits& code = ct.getCode('P');
     EXPECT_EQ(code.size(), 2u);

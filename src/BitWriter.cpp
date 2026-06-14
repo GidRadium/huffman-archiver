@@ -6,7 +6,9 @@
 #include "BitWriter.hpp"
 
 BitWriter::BitWriter(std::ostream& out, size_t bufferSizeBytes)
-    : out_(out), bufferSizeBytes_(bufferSizeBytes), bitPos(0)
+    : out_(out)
+    , bufferSizeBytes_(bufferSizeBytes)
+    , bitPos(0)
 {
     buffer.clear();
     buffer.resize(bufferSizeBytes, 0);
@@ -16,8 +18,8 @@ BitWriter::~BitWriter()
 {
     try {
         flush();
+    } catch (...) {
     }
-    catch (...) {}
 }
 
 void BitWriter::flushBuffer()
@@ -26,12 +28,12 @@ void BitWriter::flushBuffer()
     if (bytesToWrite == 0)
         return;
 
-    out_.write(reinterpret_cast<const char*>(buffer.data()), bytesToWrite);
+    out_.write(reinterpret_cast<const char*>(buffer.data()), static_cast<std::streamsize>(bytesToWrite));
 
     if (out_.bad())
         throw BitWriterIOError("BitWriter: I/O error while writing to stream");
 
-    std::fill(buffer.begin(), buffer.begin() + bytesToWrite, 0);
+    std::fill(buffer.begin(), buffer.begin() + static_cast<std::streamsize>(bytesToWrite), 0);
     bitPos = 0;
 }
 
@@ -123,7 +125,7 @@ void BitWriter::writeAllData(const std::vector<uint8_t>& data)
     if (bitPos != 0)
         flush();
 
-    out_.write(reinterpret_cast<const char*>(data.data()), data.size());
+    out_.write(reinterpret_cast<const char*>(data.data()), static_cast<std::streamsize>(data.size()));
 
     if (out_.bad())
         throw BitWriterIOError("I/O error while writing to stream");

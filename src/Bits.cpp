@@ -8,9 +8,13 @@
 Bits::Bits() = default;
 
 Bits::Bits(const uint8_t* data, size_t numBytes)
-    : bytes(data, data + numBytes), bitsCount(numBytes * 8) {}
+    : bytes(data, data + numBytes)
+    , bitsCount(numBytes * 8)
+{
+}
 
-Bits::Bits(uint8_t byte) : bitsCount(8)
+Bits::Bits(uint8_t byte)
+    : bitsCount(8)
 {
     bytes.push_back(byte);
 }
@@ -78,7 +82,7 @@ void Bits::reverse()
         return;
 
     Bits reversed;
-    for (size_t i = bitsCount; i-- > 0; )
+    for (size_t i = bitsCount; i-- > 0;)
         reversed.addBit(bitAt(i));
 
     bytes = std::move(reversed.bytes);
@@ -97,7 +101,8 @@ uint8_t Bits::toByte(size_t startBit) const
     return byte;
 }
 
-std::ostream& operator<<(std::ostream& os, const Bits& bits) {
+std::ostream& operator<<(std::ostream& os, const Bits& bits)
+{
     for (size_t i = 0; i < bits.bitsCount; ++i)
         os << (bits.bitAt(i) ? '1' : '0');
 

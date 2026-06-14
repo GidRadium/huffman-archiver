@@ -7,8 +7,8 @@
 
 #include "Bits.hpp"
 
-#include <cstdint>
 #include <array>
+#include <cstdint>
 #include <list>
 #include <stdexcept>
 #include <string>
@@ -18,7 +18,10 @@
  */
 class CodesTableException : public std::runtime_error {
 public:
-    explicit CodesTableException(const std::string& msg) : std::runtime_error(msg) {}
+    explicit CodesTableException(const std::string& msg)
+        : std::runtime_error(msg)
+    {
+    }
 };
 
 /**
@@ -26,7 +29,10 @@ public:
  */
 class CodesTableIncorrectBitsData : public CodesTableException {
 public:
-    explicit CodesTableIncorrectBitsData(const std::string& msg) : CodesTableException(msg) {}
+    explicit CodesTableIncorrectBitsData(const std::string& msg)
+        : CodesTableException(msg)
+    {
+    }
 };
 
 /**
@@ -57,7 +63,7 @@ public:
      * @param bits The bit sequence containing the table.
      * @throws CodesTableIncorrectBitsData if the data is truncated or malformed.
      */
-    CodesTable(const Bits& bits);
+    explicit CodesTable(const Bits& bits);
 
     /**
      * @brief Serialises the table into a Bits object using the compact format.
@@ -66,7 +72,7 @@ public:
      *
      * @return The serialised table.
      */
-    Bits toBits() const;
+    [[nodiscard]] Bits toBits() const;
 
     /**
      * @brief Appends a bit to the end of the codes of the given symbols.
@@ -82,7 +88,7 @@ public:
      * @param byte The symbol.
      * @return The code length in bits (0 if the symbol has no code).
      */
-    uint8_t getCodeLength(uint8_t byte) const;
+    [[nodiscard]] uint8_t getCodeLength(uint8_t byte) const;
 
     /**
      * @brief Returns a constant reference to the code for a given symbol.
@@ -90,7 +96,7 @@ public:
      * @param byte The symbol.
      * @return The code as a Bits object.
      */
-    const Bits& getCode(uint8_t byte) const;
+    [[nodiscard]] const Bits& getCode(uint8_t byte) const;
 
     /**
      * @brief Reverses the bit order of every code that has more than one bit.
@@ -98,5 +104,5 @@ public:
     void reverseAllBits();
 
 private:
-    std::array<Bits, 256> data;   ///< Codes indexed by symbol (0–255).
+    std::array<Bits, 256> data; ///< Codes indexed by symbol (0–255).
 };

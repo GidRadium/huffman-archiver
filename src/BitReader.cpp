@@ -6,7 +6,10 @@
 #include "BitReader.hpp"
 
 BitReader::BitReader(std::istream& in, size_t bufferSizeBytes)
-    : in_(in), bufferSizeBytes_(bufferSizeBytes), bitPos(0), bitsRead(0)
+    : in_(in)
+    , bufferSizeBytes_(bufferSizeBytes)
+    , bitPos(0)
+    , bitsRead(0)
 {
     buffer.clear();
     buffer.resize(bufferSizeBytes, 0);
@@ -15,7 +18,7 @@ BitReader::BitReader(std::istream& in, size_t bufferSizeBytes)
 std::vector<uint8_t> BitReader::readAllData()
 {
     std::vector<uint8_t> inData;
-    while (in_.read(reinterpret_cast<char*>(buffer.data()), buffer.size())
+    while (in_.read(reinterpret_cast<char*>(buffer.data()), static_cast<std::streamsize>(buffer.size()))
         || in_.gcount() > 0) {
         auto bytes = in_.gcount();
         inData.insert(inData.end(), buffer.data(), buffer.data() + bytes);
@@ -26,7 +29,7 @@ std::vector<uint8_t> BitReader::readAllData()
 
 void BitReader::fillBuffer()
 {
-    in_.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
+    in_.read(reinterpret_cast<char*>(buffer.data()), static_cast<std::streamsize>(buffer.size()));
     if (in_.bad())
         throw BitReaderIOError("BitReader: I/O error while reading from stream");
 
@@ -145,8 +148,10 @@ Bits BitReader::readBits(size_t bitsToRead)
             size_t bytesToCopy = std::min(bytesAvailable, remaining >> 3);
             Bits chunk(buffer.data() + (bitPos >> 3), bytesToCopy);
 
-            if (result.size() == 0) result = chunk;
-            else result.append(chunk);
+            if (result.size() == 0)
+                result = chunk;
+            else
+                result.append(chunk);
 
             bitPos += bytesToCopy << 3;
             remaining -= bytesToCopy << 3;

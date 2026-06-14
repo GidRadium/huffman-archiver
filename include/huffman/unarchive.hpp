@@ -13,7 +13,10 @@
  */
 class HuffmanUnArchiveException : public std::runtime_error {
 public:
-    explicit HuffmanUnArchiveException(const std::string& msg) : std::runtime_error(msg) {}
+    explicit HuffmanUnArchiveException(const std::string& msg)
+        : std::runtime_error(msg)
+    {
+    }
 };
 
 /**
@@ -21,7 +24,10 @@ public:
  */
 class HuffmanUnArchiveIStreamError : public HuffmanUnArchiveException {
 public:
-    explicit HuffmanUnArchiveIStreamError(const std::string& msg) : HuffmanUnArchiveException(msg) {}
+    explicit HuffmanUnArchiveIStreamError(const std::string& msg)
+        : HuffmanUnArchiveException(msg)
+    {
+    }
 };
 
 /**
@@ -29,7 +35,10 @@ public:
  */
 class HuffmanUnArchiveOStreamError : public HuffmanUnArchiveException {
 public:
-    explicit HuffmanUnArchiveOStreamError(const std::string& msg) : HuffmanUnArchiveException(msg) {}
+    explicit HuffmanUnArchiveOStreamError(const std::string& msg)
+        : HuffmanUnArchiveException(msg)
+    {
+    }
 };
 
 /**
@@ -37,7 +46,10 @@ public:
  */
 class HuffmanUnArchiveBrokenDataError : public HuffmanUnArchiveException {
 public:
-    explicit HuffmanUnArchiveBrokenDataError(const std::string& msg) : HuffmanUnArchiveException(msg) {}
+    explicit HuffmanUnArchiveBrokenDataError(const std::string& msg)
+        : HuffmanUnArchiveException(msg)
+    {
+    }
 };
 
 /**

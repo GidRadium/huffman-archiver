@@ -17,5 +17,8 @@ struct CountTable : std::array<size_t, 256> {
     /**
      * @brief Default constructor. Sets all symbol counts to zero.
      */
-    CountTable() : std::array<size_t, 256>{} {}
+    CountTable()
+        : std::array<size_t, 256> {}
+    {
+    }
 };

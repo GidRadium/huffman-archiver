@@ -7,8 +7,8 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <vector>
 #include <ostream>
+#include <vector>
 
 /**
  * @brief Stores a sequence of bits using std::vector<uint8_t>.
@@ -45,7 +45,7 @@ public:
     /**
      * @brief Returns the number of bits stored.
      */
-    size_t size() const;
+    [[nodiscard]] size_t size() const;
 
     /**
      * @brief Appends a single bit to the end of the sequence.
@@ -61,7 +61,7 @@ public:
      * @return Bit value (true = 1, false = 0).
      * @throws std::out_of_range if `index >= size()`.
      */
-    bool bitAt(size_t index) const;
+    [[nodiscard]] bool bitAt(size_t index) const;
 
     /**
      * @brief Returns the byte that contains bits `8*index` through `8*index+7`.
@@ -73,7 +73,7 @@ public:
      * @return The raw byte value.
      * @throws std::out_of_range if `index >= bytes.size()`.
      */
-    uint8_t byteAt(size_t index) const;
+    [[nodiscard]] uint8_t byteAt(size_t index) const;
 
     /**
      * @brief Appends a copy of another bit sequence.
@@ -90,7 +90,7 @@ public:
      * @return A new Bits object holding the requested range.
      * @throws std::out_of_range if `startBit+length > size()`.
      */
-    Bits slice(size_t startBit, size_t length) const;
+    [[nodiscard]] Bits slice(size_t startBit, size_t length) const;
 
     /**
      * @brief Reverses the order of all bits in place.
@@ -106,7 +106,7 @@ public:
      * @return The composed byte.
      * @throws std::out_of_range if `startBit+8 > size()`.
      */
-    uint8_t toByte(size_t startBit) const;
+    [[nodiscard]] uint8_t toByte(size_t startBit) const;
 
     /**
      * @brief Outputs the bit sequence as a string of '0' and '1'.
@@ -114,6 +114,6 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Bits& bits);
 
 private:
-    size_t bitsCount = 0;              ///< Number of valid bits.
-    std::vector<uint8_t> bytes;        ///< Underlying byte container (bits packed MSB first).
+    size_t bitsCount = 0; ///< Number of valid bits.
+    std::vector<uint8_t> bytes; ///< Underlying byte container (bits packed MSB first).
 };

@@ -7,8 +7,8 @@
 
 #include "Bits.hpp"
 
-#include <ostream>
 #include <cstdint>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -17,7 +17,10 @@
  */
 class BitWriterException : public std::runtime_error {
 public:
-    explicit BitWriterException(const std::string& msg) : std::runtime_error(msg) {}
+    explicit BitWriterException(const std::string& msg)
+        : std::runtime_error(msg)
+    {
+    }
 };
 
 /**
@@ -25,7 +28,10 @@ public:
  */
 class BitWriterIOError : public BitWriterException {
 public:
-    explicit BitWriterIOError(const std::string& msg) : BitWriterException(msg) {}
+    explicit BitWriterIOError(const std::string& msg)
+        : BitWriterException(msg)
+    {
+    }
 };
 
 /**
@@ -108,10 +114,10 @@ public:
     void flush();
 
 private:
-    std::ostream& out_;              ///< The output stream.
-    std::vector<uint8_t> buffer;     ///< Internal buffer for accumulating bits.
-    size_t bufferSizeBytes_;         ///< Size of the internal buffer in bytes.
-    size_t bitPos = 0;               ///< Current write position within the buffer (in bits).
+    std::ostream& out_; ///< The output stream.
+    std::vector<uint8_t> buffer; ///< Internal buffer for accumulating bits.
+    size_t bufferSizeBytes_; ///< Size of the internal buffer in bytes.
+    size_t bitPos = 0; ///< Current write position within the buffer (in bits).
 
     /**
      * @brief Writes full bytes from the buffer to the output stream and resets the buffer.

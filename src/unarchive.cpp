@@ -24,7 +24,8 @@ std::unique_ptr<Node> buildTree(const CodesTable& codesTable)
 
     for (size_t byte = 0; byte < 256; ++byte) {
         const Bits& code = codesTable.getCode(byte);
-        if (code.size() == 0) continue;
+        if (code.size() == 0)
+            continue;
 
         Node* current = root.get();
         for (size_t i = 0; i < code.size(); ++i) {
@@ -58,11 +59,11 @@ void unarchive(std::istream& in, std::ostream& out)
         codesTableBitsCount = reader.readUInt32();
         codesTableAsBits = reader.readBits(codesTableBitsCount);
         codesTable = CodesTable(codesTableAsBits);
-    } catch (CodesTableIncorrectBitsData) {
+    } catch (const CodesTableIncorrectBitsData&) {
         throw HuffmanUnArchiveBrokenDataError("unarchive(): istream CodesTable is incorrect.");
-    } catch (BitReaderIOError) {
+    } catch (const BitReaderIOError&) {
         throw HuffmanUnArchiveIStreamError("unarchive(): Read istream data error.");
-    } catch (BitReaderEOFError) {
+    } catch (const BitReaderEOFError&) {
         throw HuffmanUnArchiveBrokenDataError("unarchive(): Read istream unexpected EOF.");
     }
 
@@ -75,11 +76,15 @@ void unarchive(std::istream& in, std::ostream& out)
         while (bitPos < inDataSizeBits) {
             bool currentBit = reader.readBit();
             if (!currentBit) {
-                if (currentNode->left == nullptr) { throw HuffmanUnArchiveBrokenDataError(""); }
-                else currentNode = currentNode->left.get();
+                if (currentNode->left == nullptr) {
+                    throw HuffmanUnArchiveBrokenDataError("");
+                } else
+                    currentNode = currentNode->left.get();
             } else {
-                if (currentNode->right == nullptr) { throw HuffmanUnArchiveBrokenDataError(""); }
-                else currentNode = currentNode->right.get();
+                if (currentNode->right == nullptr) {
+                    throw HuffmanUnArchiveBrokenDataError("");
+                } else
+                    currentNode = currentNode->right.get();
             }
 
             if (currentNode->isLeaf) {
@@ -92,13 +97,13 @@ void unarchive(std::istream& in, std::ostream& out)
         }
 
         writer.flush();
-    } catch (BitReaderIOError) {
+    } catch (const BitReaderIOError&) {
         throw HuffmanUnArchiveIStreamError("unarchive(): Read istream data error.");
-    } catch (BitReaderEOFError) {
+    } catch (const BitReaderEOFError&) {
         throw HuffmanUnArchiveIStreamError("unarchive(): Read istream unexpected EOF.");
-    } catch (BitWriterIOError) {
+    } catch (const BitWriterIOError&) {
         throw HuffmanUnArchiveOStreamError("unarchive(): Write out stream error.");
-    } catch (HuffmanUnArchiveBrokenDataError) {
+    } catch (const HuffmanUnArchiveBrokenDataError&) {
         throw HuffmanUnArchiveBrokenDataError("unarchive(): Unexpected istream data byte code.");
     }
 }

@@ -7,8 +7,8 @@
 
 #include "Bits.hpp"
 
-#include <istream>
 #include <cstdint>
+#include <istream>
 #include <string>
 #include <vector>
 
@@ -17,7 +17,10 @@
  */
 class BitReaderException : public std::runtime_error {
 public:
-    explicit BitReaderException(const std::string& msg) : std::runtime_error(msg) {}
+    explicit BitReaderException(const std::string& msg)
+        : std::runtime_error(msg)
+    {
+    }
 };
 
 /**
@@ -25,7 +28,10 @@ public:
  */
 class BitReaderEOFError : public BitReaderException {
 public:
-    explicit BitReaderEOFError(const std::string& msg) : BitReaderException(msg) {}
+    explicit BitReaderEOFError(const std::string& msg)
+        : BitReaderException(msg)
+    {
+    }
 };
 
 /**
@@ -33,7 +39,10 @@ public:
  */
 class BitReaderIOError : public BitReaderException {
 public:
-    explicit BitReaderIOError(const std::string& msg) : BitReaderException(msg) {}
+    explicit BitReaderIOError(const std::string& msg)
+        : BitReaderException(msg)
+    {
+    }
 };
 
 /**
@@ -117,7 +126,7 @@ public:
      * @return true if the underlying stream is at EOF and all buffered bits
      *         have been consumed.
      */
-    bool eof() const;
+    [[nodiscard]] bool eof() const;
 
     /**
      * @brief Resets the reader to the beginning of the stream.
@@ -129,11 +138,11 @@ public:
     void reset();
 
 private:
-    std::istream& in_;              ///< The input stream.
-    std::vector<uint8_t> buffer;    ///< Internal buffer for raw bytes.
-    size_t bufferSizeBytes_;        ///< Size of the internal buffer in bytes.
-    size_t bitPos = 0;              ///< Current read position within the buffer (in bits).
-    size_t bitsRead = 0;            ///< Number of valid bits currently in the buffer.
+    std::istream& in_; ///< The input stream.
+    std::vector<uint8_t> buffer; ///< Internal buffer for raw bytes.
+    size_t bufferSizeBytes_; ///< Size of the internal buffer in bytes.
+    size_t bitPos = 0; ///< Current read position within the buffer (in bits).
+    size_t bitsRead = 0; ///< Number of valid bits currently in the buffer.
 
     /**
      * @brief Fills the internal buffer with fresh data from the stream.

@@ -24,3 +24,7 @@ Decompress:
 Run:
 
 `cd build && ctest && cd ..`
+
+## Lint
+
+`find . -path './build' -prune -o -type f \( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' -o -name '*.c' \) -print | xargs clang-format -i`

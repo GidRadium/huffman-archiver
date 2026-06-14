@@ -20,7 +20,8 @@ CodesTable::CodesTable(const Bits& bits)
             uint8_t length = bits.toByte(pos);
             pos += 8;
 
-            if (length == 0) continue;
+            if (length == 0)
+                continue;
 
             data[symbol] = bits.slice(pos, length);
             pos += length;
@@ -34,13 +35,15 @@ Bits CodesTable::toBits() const
 {
     size_t n = 0;
     for (const auto& entry : data)
-        if (entry.size() > 0) ++n;
+        if (entry.size() > 0)
+            ++n;
 
     Bits result = Bits(n);
 
     for (size_t sym = 0; sym < 256; ++sym) {
         const auto& entry = data[sym];
-        if (entry.size() == 0) continue;
+        if (entry.size() == 0)
+            continue;
 
         result.append(Bits(sym));
         result.append(Bits(entry.size()));
@@ -58,9 +61,9 @@ void CodesTable::addBits(const std::list<uint8_t>& bytes, bool bit)
     }
 }
 
-uint8_t CodesTable::getCodeLength(uint8_t code) const
+uint8_t CodesTable::getCodeLength(uint8_t byte) const
 {
-    return data[code].size();
+    return data[byte].size();
 }
 
 const Bits& CodesTable::getCode(uint8_t byte) const

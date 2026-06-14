@@ -12,21 +12,17 @@ jobs:
 
       - name: Check format
         run: |
-          find . -path ./build -prune -o -type f -name '*.[cpp|hpp]' -print | xargs clang-format-18 --style=file --dry-run -Werror
+          find . -path ./build -prune -o -type f \( -name '*.cpp' -o -name '*.hpp' \) -print | xargs clang-format-18 --style=file --dry-run -Werror
 
       - name: Configure
-        run: |
-          # -DCMAKE_EXPORT_COMPILE_COMMANDS=ON is important for clang-tidy
-          cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        run: cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: Build
-        run: |
-          cmake --build build
+        run: cmake --build build
 
       - name: Run tests
-        run: |
-          ctest --test-dir build --output-on-failure
+        run: ctest --test-dir build --output-on-failure
 
       - name: Lint
         run: |
-          run-clang-tidy-18 -p=build
+          find src app tests -name '*.cpp' -print0 | xargs -0 clang-tidy-18 -p build --header-filter='.*/(src|app|tests)/.*' --warnings-as-errors='*'

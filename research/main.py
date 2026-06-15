@@ -25,6 +25,14 @@ RUNS = 10
 RUNS_DELAY_SECONDS = 0.0
 
 SIZES = [
+    1,
+    4,
+    16,
+    64,
+    256,
+    1024,
+    4 * 1024,
+    16 * 1024,
     64 * 1024,
     256 * 1024,
     1024 * 1024,
@@ -40,6 +48,7 @@ DATA_TYPES = [
     "periodic4b",
     "periodic8b",
     "periodic16b",
+    "periodic32b",
     "random",
     "text",
 ]
@@ -58,6 +67,8 @@ def generate_data_file(data_type: str, data_size: int):
             pattern = b"ABCDEFGH"
         case "periodic16b":
             pattern = b"ABCDEFGHIJKLMNOP"
+        case "periodic32b":
+            pattern = b"ABCDEFGHIJKLMNOPabcdefghijklmnop"
         case "text":
             pattern = (
                 b"Console archiver based on the Huffman algorithm.\n"
@@ -265,6 +276,7 @@ def generate_plots():
     plt.legend()
     plt.tight_layout()
     plt.savefig(plots_dir / "compression_ratio.png")
+    plt.savefig(plots_dir / "compression_ratio.svg")
     plt.close()
 
     # compression_speed.png
@@ -281,6 +293,7 @@ def generate_plots():
     plt.legend()
     plt.tight_layout()
     plt.savefig(plots_dir / "compression_speed.png")
+    plt.savefig(plots_dir / "compression_speed.svg")
     plt.close()
 
     # decompression_speed.png
@@ -297,6 +310,89 @@ def generate_plots():
     plt.legend()
     plt.tight_layout()
     plt.savefig(plots_dir / "decompression_speed.png")
+    plt.savefig(plots_dir / "decompression_speed.svg")
+    plt.close()
+
+    # compression_time.png
+    plt.figure(figsize=(10, 6))
+    for dtype, recs in by_type.items():
+        sizes = [r.file_size for r in recs]
+        times = [r.compression_time_mean for r in recs]
+        plt.plot(sizes, times, marker="o", label=dtype)
+    plt.xscale("log")
+    plt.xlabel("File size (bytes)")
+    plt.ylabel("Compression time (s)")
+    plt.title("Compression time vs file size")
+    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(plots_dir / "compression_time.png")
+    plt.savefig(plots_dir / "compression_time.svg")
+    plt.close()
+
+    # decompression_time.png
+    plt.figure(figsize=(10, 6))
+    for dtype, recs in by_type.items():
+        sizes = [r.file_size for r in recs]
+        times = [r.decompression_time_mean for r in recs]
+        plt.plot(sizes, times, marker="o", label=dtype)
+    plt.xscale("log")
+    plt.xlabel("File size (bytes)")
+    plt.ylabel("Decompression time (s)")
+    plt.title("Decompression time vs file size")
+    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(plots_dir / "decompression_time.png")
+    plt.savefig(plots_dir / "decompression_time.svg")
+    plt.close()
+
+    # compression_ratio_vs_entropy.png
+    plt.figure(figsize=(10, 6))
+    for dtype, recs in by_type.items():
+        entropy = [r.data_entropy for r in recs]
+        ratios = [r.compression_ratio for r in recs]
+        plt.plot(entropy, ratios, marker="o", label=dtype)
+    plt.xlabel("Entropy (bits/byte)")
+    plt.ylabel("Compression ratio (compressed/original)")
+    plt.title("Compression ratio vs entropy")
+    plt.grid(True, linestyle="--", linewidth=0.5)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(plots_dir / "compression_ratio_vs_entropy.png")
+    plt.savefig(plots_dir / "compression_ratio_vs_entropy.svg")
+    plt.close()
+
+    # compression_speed_vs_entropy.png
+    plt.figure(figsize=(10, 6))
+    for dtype, recs in by_type.items():
+        entropy = [r.data_entropy for r in recs]
+        speeds = [r.compression_speed for r in recs]
+        plt.plot(entropy, speeds, marker="o", label=dtype)
+    plt.xlabel("Entropy (bits/byte)")
+    plt.ylabel("Compression speed (bytes/s)")
+    plt.title("Compression speed vs entropy")
+    plt.grid(True, linestyle="--", linewidth=0.5)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(plots_dir / "compression_speed_vs_entropy.png")
+    plt.savefig(plots_dir / "compression_speed_vs_entropy.svg")
+    plt.close()
+
+    # decompression_speed_vs_entropy.png
+    plt.figure(figsize=(10, 6))
+    for dtype, recs in by_type.items():
+        entropy = [r.data_entropy for r in recs]
+        speeds = [r.decompression_speed for r in recs]
+        plt.plot(entropy, speeds, marker="o", label=dtype)
+    plt.xlabel("Entropy (bits/byte)")
+    plt.ylabel("Decompression speed (bytes/s)")
+    plt.title("Decompression speed vs entropy")
+    plt.grid(True, linestyle="--", linewidth=0.5)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(plots_dir / "decompression_speed_vs_entropy.png")
+    plt.savefig(plots_dir / "decompression_speed_vs_entropy.svg")
     plt.close()
 
     print(f"Plots saved to {plots_dir}")
@@ -308,6 +404,9 @@ def main():
 
     print("Running benchmarks...")
     run_benchmarks()
+
+    print("Saving results...")
+    save_results_to_csv()
 
     print("Generating plots...")
     generate_plots()

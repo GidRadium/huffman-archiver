@@ -67,3 +67,15 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# custom
+.clangd
+.zed
+
+# research data files
+research/archives*
+research/datasets*
+research/restored*
+
+# uv
+research/uv.lock

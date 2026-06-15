@@ -1,0 +1,18 @@
+<map id="src/BitWriter.hpp" name="src/BitWriter.hpp">
+<area shape="rect" id="Node000001" title="Bit&#45;level output stream wrapper." alt="" coords="164,5,295,31"/>
+<area shape="rect" id="Node000002" href="$Bits_8hpp.html" title="Stores a sequence of bits using std::vector&lt;uint8_t&gt;." alt="" coords="117,79,192,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,33,179,71,175,67,216,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,152,72,177"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="196,33,152,53,107,81,78,111,55,142,51,138,73,107,104,77,149,48,194,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="191,152,267,177"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="232,31,232,138,227,138,227,31"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="291,152,354,177"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="239,30,310,139,306,142,235,33"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="317,79,376,104"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="250,28,317,69,314,74,247,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,152,167,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="153,105,142,140,137,138,148,104"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="137,106,71,147,68,142,135,102"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="168,102,209,141,205,144,165,106"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="183,102,284,144,282,149,181,106"/>
+</map>

@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['bitat_0',['bitAt',['../classBits.html#a736f32ecbf5117648e54282f449a9b07',1,'Bits']]],
+  ['bitpos_1',['bitpos',['../classBitWriter.html#aa688a0a8b01faa2a55f69bdf660708e8',1,'BitWriter::bitPos'],['../classBitReader.html#aba98ced5bf96817d92af2ab083a117a7',1,'BitReader::bitPos']]],
+  ['bitreader_2',['bitreader',['../classBitReader.html',1,'BitReader'],['../classBitReader.html#a64dba9eec30d7c56bfe308f0edb65ae2',1,'BitReader::BitReader()']]],
+  ['bitreader_2ecpp_3',['BitReader.cpp',['../BitReader_8cpp.html',1,'']]],
+  ['bitreader_2ehpp_4',['BitReader.hpp',['../BitReader_8hpp.html',1,'']]],
+  ['bitreadereoferror_5',['BitReaderEOFError',['../classBitReaderEOFError.html',1,'']]],
+  ['bitreaderexception_6',['BitReaderException',['../classBitReaderException.html',1,'']]],
+  ['bitreaderioerror_7',['BitReaderIOError',['../classBitReaderIOError.html',1,'']]],
+  ['bits_8',['bits',['../classBits.html',1,'Bits'],['../classBits.html#a24e56766ffd51f967c25233710335281',1,'Bits::Bits()'],['../classBits.html#a20a57efc6cfcc95767ddc56a3c18dae6',1,'Bits::Bits(const uint8_t *data, size_t numBytes)'],['../classBits.html#a788132a1c52af248fa04b800113aee7e',1,'Bits::Bits(uint8_t byte)']]],
+  ['bits_2ecpp_9',['Bits.cpp',['../Bits_8cpp.html',1,'']]],
+  ['bits_2ehpp_10',['Bits.hpp',['../Bits_8hpp.html',1,'']]],
+  ['bitscount_11',['bitsCount',['../classBits.html#a9693c9722f343d45069ba7f4b59ee9f1',1,'Bits']]],
+  ['bitsread_12',['bitsRead',['../classBitReader.html#afc76c3e89f702d06d39662f7c918df28',1,'BitReader']]],
+  ['bitwriter_13',['bitwriter',['../classBitWriter.html#a4dcf49be494b076ef17b98827ca7c9a2',1,'BitWriter::BitWriter()'],['../classBitWriter.html',1,'BitWriter']]],
+  ['bitwriter_2ecpp_14',['BitWriter.cpp',['../BitWriter_8cpp.html',1,'']]],
+  ['bitwriter_2ehpp_15',['BitWriter.hpp',['../BitWriter_8hpp.html',1,'']]],
+  ['bitwriterexception_16',['BitWriterException',['../classBitWriterException.html',1,'']]],
+  ['bitwriterioerror_17',['BitWriterIOError',['../classBitWriterIOError.html',1,'']]],
+  ['buffer_18',['buffer',['../classBitReader.html#aa3422ed7dca68ec0def9ce4be9fb96c2',1,'BitReader::buffer'],['../classBitWriter.html#a7c397d520e0e64c28f3f8ecde53b7ed1',1,'BitWriter::buffer']]],
+  ['buffersizebytes_5f_19',['buffersizebytes_',['../classBitReader.html#a63c05f695e785f6382b82c2b5ee0422f',1,'BitReader::bufferSizeBytes_'],['../classBitWriter.html#a35322fe57dbe8309255b2ff32d1f0d9e',1,'BitWriter::bufferSizeBytes_']]],
+  ['byteat_20',['byteAt',['../classBits.html#aa5f873580b5858dc50cc42daadd51647',1,'Bits']]],
+  ['bytes_21',['bytes',['../classBits.html#a2bc9f28c9f41170caa15f526c8cdddbc',1,'Bits']]]
+];

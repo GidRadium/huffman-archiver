@@ -1,0 +1,25 @@
+var annotated_dup =
+[
+    [ "ArchiveUnarchiveRoundTrip", "classArchiveUnarchiveRoundTrip.html", null ],
+    [ "BitReader", "classBitReader.html", "classBitReader" ],
+    [ "BitReaderEOFError", "classBitReaderEOFError.html", null ],
+    [ "BitReaderException", "classBitReaderException.html", null ],
+    [ "BitReaderIOError", "classBitReaderIOError.html", null ],
+    [ "Bits", "classBits.html", "classBits" ],
+    [ "BitWriter", "classBitWriter.html", "classBitWriter" ],
+    [ "BitWriterException", "classBitWriterException.html", null ],
+    [ "BitWriterIOError", "classBitWriterIOError.html", null ],
+    [ "CodesTable", "classCodesTable.html", "classCodesTable" ],
+    [ "CodesTableException", "classCodesTableException.html", null ],
+    [ "CodesTableIncorrectBitsData", "classCodesTableIncorrectBitsData.html", null ],
+    [ "CountTable", "structCountTable.html", "structCountTable" ],
+    [ "HuffmanArchiveException", "classHuffmanArchiveException.html", null ],
+    [ "HuffmanArchiveIStreamError", "classHuffmanArchiveIStreamError.html", null ],
+    [ "HuffmanArchiveOStreamError", "classHuffmanArchiveOStreamError.html", null ],
+    [ "HuffmanUnArchiveBrokenDataError", "classHuffmanUnArchiveBrokenDataError.html", null ],
+    [ "HuffmanUnArchiveException", "classHuffmanUnArchiveException.html", null ],
+    [ "HuffmanUnArchiveIStreamError", "classHuffmanUnArchiveIStreamError.html", null ],
+    [ "HuffmanUnArchiveOStreamError", "classHuffmanUnArchiveOStreamError.html", null ],
+    [ "Node", "structNode.html", null ],
+    [ "Options", "structOptions.html", "structOptions" ]
+];

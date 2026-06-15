@@ -1,0 +1,21 @@
+<map id="src/BitReader.cpp" name="src/BitReader.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the BitReader class." alt="" coords="187,5,322,31"/>
+<area shape="rect" id="Node000002" href="$BitReader_8hpp.html" title="Bit&#45;level input stream wrapper." alt="" coords="198,79,311,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,31,257,65,252,65,252,31"/>
+<area shape="rect" id="Node000003" href="$Bits_8hpp.html" title="Stores a sequence of bits using std::vector&lt;uint8_t&gt;." alt="" coords="143,152,217,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="245,106,204,144,200,141,241,102"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,225,72,251"/>
+<area shape="poly" id="edge7_Node000002_Node000005" title=" " alt="" coords="226,106,180,127,132,154,93,186,60,217,56,213,89,182,129,150,178,122,224,102"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="291,225,354,251"/>
+<area shape="poly" id="edge10_Node000002_Node000007" title=" " alt="" coords="259,103,268,137,282,176,306,213,302,216,278,179,263,138,254,105"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="292,152,364,177"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="269,102,308,140,304,144,265,106"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="388,152,447,177"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="282,102,379,144,377,149,280,106"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="97,225,167,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="174,179,150,216,145,213,170,176"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="158,180,75,221,73,217,156,175"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="191,225,267,251"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="190,176,216,213,211,216,186,179"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="204,175,288,217,286,221,202,180"/>
+</map>

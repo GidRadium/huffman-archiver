@@ -1,0 +1,11 @@
+<map id="HuffmanUnArchiveException" name="HuffmanUnArchiveException">
+<area shape="rect" id="Node000001" title="Base exception for unarchive errors." alt="" coords="192,70,401,95"/>
+<area shape="rect" id="Node000003" href="$classHuffmanUnArchiveBrokenDataError.html" title="Thrown when the compressed data is malformed or truncated." alt="" coords="455,5,677,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="370,64,471,43,472,48,371,70"/>
+<area shape="rect" id="Node000004" href="$classHuffmanUnArchiveIStreamError.html" title="Thrown when a read error occurs on the input stream." alt="" coords="453,70,679,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="415,80,452,80,452,85,415,85"/>
+<area shape="rect" id="Node000005" href="$classHuffmanUnArchiveOStreamError.html" title="Thrown when a write error occurs on the output stream." alt="" coords="449,119,683,145"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="381,95,496,117,495,122,380,100"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,70,144,95"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,80,192,80,192,85,158,85"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="HuffmanArchiveException" name="HuffmanArchiveException">
+<area shape="rect" id="Node000001" title="Base exception for archive errors." alt="" coords="132,79,323,104"/>
+<area shape="rect" id="Node000003" href="$classHuffmanArchiveIStreamError.html" title="Thrown when a read error occurs on the input stream." alt="" coords="5,152,215,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,113,131,154,128,149,195,109"/>
+<area shape="rect" id="Node000004" href="$classHuffmanArchiveOStreamError.html" title="Thrown when a write error occurs on the output stream." alt="" coords="239,152,453,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="260,109,328,149,325,154,257,113"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="158,5,297,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,44,230,79,225,79,225,44"/>
+</map>

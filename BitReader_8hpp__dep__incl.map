@@ -1,0 +1,9 @@
+<map id="src/BitReader.hpp" name="src/BitReader.hpp">
+<area shape="rect" id="Node000001" title="Bit&#45;level input stream wrapper." alt="" coords="157,5,293,31"/>
+<area shape="rect" id="Node000002" href="$BitReader_8cpp.html" title="Implementation of the BitReader class." alt="" coords="5,79,140,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,39,99,81,96,76,187,34"/>
+<area shape="rect" id="Node000003" href="$archive_8cpp.html" title="Implementation of Huffman compression." alt="" coords="165,79,285,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,44,227,79,222,79,222,44"/>
+<area shape="rect" id="Node000004" href="$unarchive_8cpp.html" title="Implementation of Huffman decompression." alt="" coords="309,79,445,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="262,34,353,76,351,81,260,39"/>
+</map>

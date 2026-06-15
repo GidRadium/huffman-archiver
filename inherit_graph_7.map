@@ -1,0 +1,31 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,153,144,179"/>
+<area shape="rect" id="Node000001" href="$classBitReaderException.html" title="Base exception class for BitReader errors." alt="" coords="221,55,372,80"/>
+<area shape="poly" id="edge2_Node000000_Node000001" title=" " alt="" coords="101,143,142,115,191,89,225,78,226,83,193,94,145,119,104,147"/>
+<area shape="rect" id="Node000004" href="$classBitWriterException.html" title="Base exception class for BitWriter errors." alt="" coords="225,104,369,129"/>
+<area shape="poly" id="edge5_Node000000_Node000004" title=" " alt="" coords="145,148,238,127,239,132,146,153"/>
+<area shape="rect" id="Node000006" href="$classCodesTableException.html" title="Base exception class for CodesTable errors." alt="" coords="217,153,377,179"/>
+<area shape="poly" id="edge7_Node000000_Node000006" title=" " alt="" coords="158,163,216,163,216,169,158,169"/>
+<area shape="rect" id="Node000008" href="$classHuffmanArchiveException.html" title="Base exception for archive errors." alt="" coords="201,203,392,228"/>
+<area shape="poly" id="edge9_Node000000_Node000008" title=" " alt="" coords="146,179,239,200,238,205,145,184"/>
+<area shape="rect" id="Node000011" href="$classHuffmanUnArchiveException.html" title="Base exception for unarchive errors." alt="" coords="192,337,401,363"/>
+<area shape="poly" id="edge12_Node000000_Node000011" title=" " alt="" coords="104,186,282,335,279,339,100,190"/>
+<area shape="rect" id="Node000002" href="$classBitReaderEOFError.html" title="Thrown when attempting to read past the end of the stream." alt="" coords="495,5,637,31"/>
+<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="380,50,495,28,496,33,381,55"/>
+<area shape="rect" id="Node000003" href="$classBitReaderIOError.html" title="Thrown when an I/O error occurs during reading or seeking." alt="" coords="501,55,631,80"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="386,65,500,65,500,70,386,70"/>
+<area shape="rect" id="Node000005" href="$classBitWriterIOError.html" title="Thrown when an I/O error occurs during writing or flushing." alt="" coords="503,104,629,129"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="382,114,503,114,503,119,382,119"/>
+<area shape="rect" id="Node000007" href="$classCodesTableIncorrectBitsData.html" title="Thrown when the provided bit data cannot be parsed into a valid code table." alt="" coords="461,153,671,179"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="391,163,461,163,461,169,391,169"/>
+<area shape="rect" id="Node000009" href="$classHuffmanArchiveIStreamError.html" title="Thrown when a read error occurs on the input stream." alt="" coords="461,203,671,228"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="406,213,461,213,461,218,406,218"/>
+<area shape="rect" id="Node000010" href="$classHuffmanArchiveOStreamError.html" title="Thrown when a write error occurs on the output stream." alt="" coords="459,252,673,277"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="381,228,496,249,495,255,380,233"/>
+<area shape="rect" id="Node000012" href="$classHuffmanUnArchiveBrokenDataError.html" title="Thrown when the compressed data is malformed or truncated." alt="" coords="455,302,677,342"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="414,335,455,331,455,336,415,340"/>
+<area shape="rect" id="Node000013" href="$classHuffmanUnArchiveIStreamError.html" title="Thrown when a read error occurs on the input stream." alt="" coords="453,367,679,392"/>
+<area shape="poly" id="edge14_Node000011_Node000013" title=" " alt="" coords="415,360,453,364,452,370,415,366"/>
+<area shape="rect" id="Node000014" href="$classHuffmanUnArchiveOStreamError.html" title="Thrown when a write error occurs on the output stream." alt="" coords="449,416,683,441"/>
+<area shape="poly" id="edge15_Node000011_Node000014" title=" " alt="" coords="343,365,450,402,496,413,495,418,449,407,341,370"/>
+</map>

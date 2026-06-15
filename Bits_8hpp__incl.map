@@ -1,0 +1,11 @@
+<map id="src/Bits.hpp" name="src/Bits.hpp">
+<area shape="rect" id="Node000001" title="Stores a sequence of bits using std::vector&lt;uint8_t&gt;." alt="" coords="133,5,231,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,76,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,33,77,75,75,70,158,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="101,79,167,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="176,33,152,69,147,66,172,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="192,79,268,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="192,30,217,66,212,69,188,33"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="292,79,355,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="206,28,289,70,287,75,204,33"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="src/CodesTable.cpp" name="src/CodesTable.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the CodesTable class." alt="" coords="423,5,570,31"/>
+<area shape="rect" id="Node000002" href="$CodesTable_8hpp.html" title="Huffman code table for symbols 0–255." alt="" coords="328,79,452,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="481,33,420,73,417,69,478,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="521,225,587,251"/>
+<area shape="poly" id="edge12_Node000001_Node000005" title=" " alt="" coords="506,30,532,81,546,115,557,151,560,183,559,211,554,211,555,183,551,153,541,117,528,83,501,32"/>
+<area shape="rect" id="Node000003" href="$Bits_8hpp.html" title="Stores a sequence of bits using std::vector&lt;uint8_t&gt;." alt="" coords="101,152,175,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,107,190,152,188,147,349,101"/>
+<area shape="poly" id="edge8_Node000002_Node000005" title=" " alt="" coords="445,102,490,120,512,133,531,150,547,180,555,210,549,212,542,182,527,154,509,138,488,124,443,107"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="199,152,255,177"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="365,106,268,149,265,144,363,102"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="279,152,322,177"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="377,106,328,145,324,141,374,102"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="347,152,433,177"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="393,104,393,138,387,138,387,104"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="458,152,517,177"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="407,102,462,141,459,146,404,106"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,225,76,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="124,180,69,219,66,215,121,175"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="176,172,188,175,364,206,507,227,507,233,363,211,187,180,175,178"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="100,225,176,251"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="141,178,141,212,135,212,135,178"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="200,225,263,251"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="155,175,207,215,204,219,151,179"/>
+</map>

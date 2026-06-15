@@ -1,0 +1,7 @@
+<map id="CodesTableException" name="CodesTableException">
+<area shape="rect" id="Node000001" title="Base exception class for CodesTable errors." alt="" coords="30,79,190,104"/>
+<area shape="rect" id="Node000003" href="$classCodesTableIncorrectBitsData.html" title="Thrown when the provided bit data cannot be parsed into a valid code table." alt="" coords="5,152,215,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="113,118,113,152,107,152,107,118"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,5,179,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,44,113,79,107,79,107,44"/>
+</map>

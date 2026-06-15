@@ -1,0 +1,7 @@
+<map id="include/huffman/archive.hpp" name="include/huffman/archive.hpp">
+<area shape="rect" id="Node000001" title="Huffman compression entry point." alt="" coords="19,5,226,31"/>
+<area shape="rect" id="Node000002" href="$app_8cpp.html" title="Implementation of the console application logic." alt="" coords="5,79,107,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,43,69,80,65,77,100,39"/>
+<area shape="rect" id="Node000003" href="$archive_8cpp.html" title="Implementation of Huffman compression." alt="" coords="131,79,251,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,39,182,77,178,80,141,42"/>
+</map>

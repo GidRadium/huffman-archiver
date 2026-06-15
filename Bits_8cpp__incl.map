@@ -1,0 +1,13 @@
+<map id="src/Bits.cpp" name="src/Bits.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the Bits class." alt="" coords="133,5,231,31"/>
+<area shape="rect" id="Node000002" href="$Bits_8hpp.html" title="Stores a sequence of bits using std::vector&lt;uint8_t&gt;." alt="" coords="145,79,219,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="185,31,185,65,179,65,179,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,76,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,106,77,148,75,143,158,102"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="101,152,167,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="176,106,152,142,147,139,172,103"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="192,152,268,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="192,103,217,139,212,142,188,106"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="292,152,355,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="206,102,289,143,287,148,204,106"/>
+</map>

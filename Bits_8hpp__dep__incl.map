@@ -1,0 +1,25 @@
+<map id="src/Bits.hpp" name="src/Bits.hpp">
+<area shape="rect" id="Node000001" title="Stores a sequence of bits using std::vector&lt;uint8_t&gt;." alt="" coords="409,5,507,31"/>
+<area shape="rect" id="Node000002" href="$BitReader_8hpp.html" title="Bit&#45;level input stream wrapper." alt="" coords="143,79,279,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="406,37,252,81,251,76,405,32"/>
+<area shape="rect" id="Node000006" href="$BitWriter_8hpp.html" title="Bit&#45;level output stream wrapper." alt="" coords="474,79,605,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="483,38,528,76,524,80,480,42"/>
+<area shape="rect" id="Node000008" href="$Bits_8cpp.html" title="Implementation of the Bits class." alt="" coords="629,79,727,104"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="507,32,643,76,642,81,506,37"/>
+<area shape="rect" id="Node000009" href="$CodesTable_8hpp.html" title="Huffman code table for symbols 0–255." alt="" coords="303,79,450,104"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="436,42,392,80,388,76,433,38"/>
+<area shape="rect" id="Node000003" href="$BitReader_8cpp.html" title="Implementation of the BitReader class." alt="" coords="5,152,140,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="178,113,97,154,94,149,176,108"/>
+<area shape="rect" id="Node000004" href="$archive_8cpp.html" title="Implementation of Huffman compression." alt="" coords="165,152,285,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="219,117,225,151,220,152,213,118"/>
+<area shape="rect" id="Node000005" href="$unarchive_8cpp.html" title="Implementation of Huffman decompression." alt="" coords="309,152,445,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="251,107,351,149,349,154,249,112"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="476,110,276,154,275,149,475,104"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="502,112,404,154,402,149,500,107"/>
+<area shape="rect" id="Node000007" href="$BitWriter_8cpp.html" title="Implementation of the BitWriter class." alt="" coords="640,152,769,177"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="579,107,679,149,677,154,577,112"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="341,112,251,154,248,149,339,107"/>
+<area shape="poly" id="edge13_Node000009_Node000005" title=" " alt="" coords="379,118,379,152,374,152,374,118"/>
+<area shape="rect" id="Node000010" href="$CodesTable_8cpp.html" title="Implementation of the CodesTable class." alt="" coords="469,152,615,177"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="417,107,516,149,514,154,415,112"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="src/BitReader.hpp" name="src/BitReader.hpp">
+<area shape="rect" id="Node000001" title="Bit&#45;level input stream wrapper." alt="" coords="187,5,323,31"/>
+<area shape="rect" id="Node000002" href="$Bits_8hpp.html" title="Stores a sequence of bits using std::vector&lt;uint8_t&gt;." alt="" coords="143,79,217,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="245,33,204,71,200,67,241,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,152,72,177"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="226,33,180,53,132,81,93,112,60,144,56,140,89,108,129,76,178,49,224,28"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="291,152,354,177"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="259,30,268,64,282,103,306,140,302,143,278,105,263,65,254,31"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="292,79,364,104"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="269,29,308,67,304,71,265,33"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="388,79,447,104"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="282,28,379,71,377,75,280,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,152,167,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="174,106,150,142,145,139,170,103"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="158,106,75,148,73,143,156,102"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="191,152,267,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="190,103,216,139,211,142,186,106"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="204,102,288,143,286,148,202,106"/>
+</map>

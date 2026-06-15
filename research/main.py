@@ -227,6 +227,8 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
 
 # ROOT / "datasets" / f"{data_type}" / f"{data_size}.bin"
 def generate_datasets():
+    print("Generating datasets...")
+
     for data_type in DATA_TYPES:
         for size in SIZES:
             print(f"gener {data_type} + {size}")
@@ -237,6 +239,8 @@ results: list[BenchmarkResult] = []
 
 
 def run_benchmarks():
+    print("Running benchmarks...")
+
     for data_type in DATA_TYPES:
         for size in SIZES:
             print(f"bench {data_type} + {size}")
@@ -244,6 +248,8 @@ def run_benchmarks():
 
 
 def save_results_to_csv():
+    print("Saving results...")
+
     csv_path = ROOT / "benchmark_results.csv"
     fieldnames = [
         "file_type",
@@ -337,12 +343,19 @@ def _plot_metric(
     plt.legend()
     plt.tight_layout()
 
-    for ext in ("png", "svg"):
-        plt.savefig(plots_dir / f"{fname}.{ext}")
+    png_dir = plots_dir / "png"
+    svg_dir = plots_dir / "svg"
+    png_dir.mkdir(parents=True, exist_ok=True)
+    svg_dir.mkdir(parents=True, exist_ok=True)
+
+    plt.savefig(png_dir / f"{fname}.png")
+    plt.savefig(svg_dir / f"{fname}.svg")
     plt.close()
 
 
 def generate_plots():
+    print("Generating plots...")
+
     plots_dir = ROOT / "plots"
     plots_dir.mkdir(exist_ok=True)
 
@@ -425,10 +438,10 @@ def generate_plots():
             "yerr": "decompression_time_std",
         },
         {
-            "x": "compression_ratio",
-            "y": "data_entropy",
-            "xlabel": "Compression ratio (compressed/original)",
-            "ylabel": "Entropy (bits/byte)",
+            "x": "data_entropy",
+            "y": "compression_ratio",
+            "xlabel": "Entropy (bits/byte)",
+            "ylabel": "Compression ratio (compressed/original)",
             "title": "Compression ratio vs entropy",
             "fname": "compression_ratio_vs_entropy",
             "log_x": False,
@@ -468,16 +481,9 @@ def generate_plots():
 
 
 def main():
-    # print("Generating datasets...")
-    # generate_datasets()
-
-    # print("Running benchmarks...")
-    # run_benchmarks()
-
-    # print("Saving results...")
-    # save_results_to_csv()
-
-    print("Generating plots...")
+    generate_datasets()
+    run_benchmarks()
+    save_results_to_csv()
     generate_plots()
 
 

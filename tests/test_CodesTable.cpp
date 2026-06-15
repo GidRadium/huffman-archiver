@@ -16,8 +16,8 @@ TEST(CodesTableEmpty, SerializeEmpty)
 {
     CodesTable ct;
     Bits bits = ct.toBits();
-    EXPECT_EQ(bits.size(), 8u);
-    for (size_t i = 0; i < 8; ++i)
+    EXPECT_EQ(bits.size(), 16u);
+    for (size_t i = 0; i < 16; ++i)
         EXPECT_FALSE(bits.bitAt(i));
 }
 

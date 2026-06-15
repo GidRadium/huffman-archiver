@@ -7,6 +7,7 @@ from collections import Counter
 from dataclasses import dataclass
 from math import log2
 from pathlib import Path
+from types import SimpleNamespace
 
 import matplotlib.pyplot as plt
 
@@ -26,20 +27,33 @@ RUNS_DELAY_SECONDS = 0.0
 
 SIZES = [
     1,
+    2,
     4,
+    8,
     16,
+    32,
     64,
+    128,
     256,
+    512,
     1024,
+    2 * 1024,
     4 * 1024,
+    8 * 1024,
     16 * 1024,
+    32 * 1024,
     64 * 1024,
+    128 * 1024,
     256 * 1024,
+    512 * 1024,
     1024 * 1024,
+    2 * 1024 * 1024,
     4 * 1024 * 1024,
+    8 * 1024 * 1024,
     16 * 1024 * 1024,
+    32 * 1024 * 1024,
     64 * 1024 * 1024,
-    # 256 * 1024 * 1024,
+    128 * 1024 * 1024,
 ]
 
 DATA_TYPES = [
@@ -71,7 +85,7 @@ def generate_data_file(data_type: str, data_size: int):
             pattern = b"ABCDEFGHIJKLMNOPabcdefghijklmnop"
         case "text":
             pattern = (
-                b"Console archiver based on the Huffman algorithm.\n"
+                b"Console archiver based on the Huffman algorithm. !? 1234567890 - $,\n"
                 b"Works with files of any size.\n"
                 b"Can compress either in RAM or after two passes of the file.\n"
             )
@@ -102,6 +116,8 @@ class BenchmarkResult:
     decompression_time_std: float = 0.0  # seconds
     compression_speed: float = 0.0  # bytes per second
     decompression_speed: float = 0.0  # bytes per second
+    compression_speed_std: float = 0.0  # bytes per second
+    decompression_speed_std: float = 0.0  # bytes per second
     data_entropy: float = 0.0
 
 
@@ -189,6 +205,21 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
     )
     result.compression_speed = result.file_size / result.compression_time_mean
     result.decompression_speed = result.file_size / result.decompression_time_mean
+
+    if result.compression_time_mean > 0 and result.compression_time_std > 0:
+        result.compression_speed_std = result.compression_speed * (
+            result.compression_time_std / result.compression_time_mean
+        )
+    else:
+        result.compression_speed_std = 0.0
+
+    if result.decompression_time_mean > 0 and result.decompression_time_std > 0:
+        result.decompression_speed_std = result.decompression_speed * (
+            result.decompression_time_std / result.decompression_time_mean
+        )
+    else:
+        result.decompression_speed_std = 0.0
+
     result.data_entropy = entropy(input_file)
 
     return result
@@ -224,7 +255,9 @@ def save_results_to_csv():
         "decompression_time_mean",
         "decompression_time_std",
         "compression_speed",
+        "compression_speed_std",
         "decompression_speed",
+        "decompression_speed_std",
         "data_entropy",
     ]
 
@@ -243,7 +276,9 @@ def save_results_to_csv():
                     "decompression_time_mean": r.decompression_time_mean,
                     "decompression_time_std": r.decompression_time_std,
                     "compression_speed": r.compression_speed,
+                    "compression_speed_std": r.compression_speed_std,
                     "decompression_speed": r.decompression_speed,
+                    "decompression_speed_std": r.decompression_speed_std,
                     "data_entropy": r.data_entropy,
                 }
             )
@@ -251,162 +286,196 @@ def save_results_to_csv():
     print(f"Results saved to {csv_path}")
 
 
+def _plot_metric(
+    by_type,
+    plots_dir,
+    x,
+    y,
+    xlabel,
+    ylabel,
+    title,
+    fname,
+    log_x,
+    grid_kwargs,
+    yerr=None,
+    min_file_size=0,
+):
+    plt.figure(figsize=(10, 6))
+    for dtype, recs in by_type.items():
+        filtered = [r for r in recs if r.file_size >= min_file_size]
+        if not filtered:
+            continue
+
+        xs = [getattr(r, x) for r in filtered]
+        ys = [getattr(r, y) for r in filtered]
+        if yerr:
+            errs = [getattr(r, yerr) for r in filtered]
+            plt.errorbar(xs, ys, yerr=errs, marker="o", label=dtype, capsize=3)
+        else:
+            plt.plot(xs, ys, marker="o", label=dtype)
+
+    if min_file_size > 0:
+        note = f"Min file size ≥ {min_file_size:,} B".replace(",", " ")
+        plt.text(
+            0.99,
+            0.01,
+            note,
+            transform=plt.gca().transAxes,
+            fontsize=9,
+            color="grey",
+            ha="right",
+            va="bottom",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor="white", alpha=0.7),
+        )
+
+    if log_x:
+        plt.xscale("log")
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+    plt.grid(True, **grid_kwargs)
+    plt.legend()
+    plt.tight_layout()
+
+    for ext in ("png", "svg"):
+        plt.savefig(plots_dir / f"{fname}.{ext}")
+    plt.close()
+
+
 def generate_plots():
     plots_dir = ROOT / "plots"
     plots_dir.mkdir(exist_ok=True)
 
+    csv_path = ROOT / "benchmark_results.csv"
+    records = []
+    with open(csv_path, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            rec = SimpleNamespace()
+            for field, value in row.items():
+                if field == "file_type":
+                    setattr(rec, field, value)
+                else:
+                    try:
+                        setattr(rec, field, float(value))
+                    except (ValueError, TypeError):
+                        setattr(rec, field, 0.0)
+            records.append(rec)
+
     by_type = {}
-    for r in results:
+    for r in records:
         by_type.setdefault(r.file_type, []).append(r)
+    for recs in by_type.values():
+        recs.sort(key=lambda x: x.file_size)
 
-    for data_type in by_type:
-        by_type[data_type].sort(key=lambda x: x.file_size)
+    specs = [
+        {
+            "x": "file_size",
+            "y": "compression_ratio",
+            "xlabel": "File size (bytes)",
+            "ylabel": "Compression ratio (compressed/original)",
+            "title": "Compression ratio vs file size",
+            "fname": "compression_ratio",
+            "log_x": True,
+            "grid_kwargs": {"which": "both", "linestyle": "--", "linewidth": 0.5},
+            "min_file_size": 512,
+        },
+        {
+            "x": "file_size",
+            "y": "compression_speed",
+            "xlabel": "File size (bytes)",
+            "ylabel": "Compression speed (bytes/s)",
+            "title": "Compression speed vs file size",
+            "fname": "compression_speed",
+            "log_x": True,
+            "grid_kwargs": {"which": "both", "linestyle": "--", "linewidth": 0.5},
+            "yerr": "compression_speed_std",
+        },
+        {
+            "x": "file_size",
+            "y": "decompression_speed",
+            "xlabel": "File size (bytes)",
+            "ylabel": "Decompression speed (bytes/s)",
+            "title": "Decompression speed vs file size",
+            "fname": "decompression_speed",
+            "log_x": True,
+            "grid_kwargs": {"which": "both", "linestyle": "--", "linewidth": 0.5},
+            "yerr": "decompression_speed_std",
+        },
+        {
+            "x": "file_size",
+            "y": "compression_time_mean",
+            "xlabel": "File size (bytes)",
+            "ylabel": "Compression time (s)",
+            "title": "Compression time vs file size",
+            "fname": "compression_time",
+            "log_x": False,
+            "grid_kwargs": {"which": "both", "linestyle": "--", "linewidth": 0.5},
+            "yerr": "compression_time_std",
+        },
+        {
+            "x": "file_size",
+            "y": "decompression_time_mean",
+            "xlabel": "File size (bytes)",
+            "ylabel": "Decompression time (s)",
+            "title": "Decompression time vs file size",
+            "fname": "decompression_time",
+            "log_x": False,
+            "grid_kwargs": {"which": "both", "linestyle": "--", "linewidth": 0.5},
+            "yerr": "decompression_time_std",
+        },
+        {
+            "x": "compression_ratio",
+            "y": "data_entropy",
+            "xlabel": "Compression ratio (compressed/original)",
+            "ylabel": "Entropy (bits/byte)",
+            "title": "Compression ratio vs entropy",
+            "fname": "compression_ratio_vs_entropy",
+            "log_x": False,
+            "grid_kwargs": {"linestyle": "--", "linewidth": 0.5},
+            "min_file_size": 512,
+        },
+        {
+            "x": "data_entropy",
+            "y": "compression_speed",
+            "xlabel": "Entropy (bits/byte)",
+            "ylabel": "Compression speed (bytes/s)",
+            "title": "Compression speed vs entropy",
+            "fname": "compression_speed_vs_entropy",
+            "log_x": False,
+            "grid_kwargs": {"linestyle": "--", "linewidth": 0.5},
+            "yerr": "compression_speed_std",
+            "min_file_size": 512 * 1024,
+        },
+        {
+            "x": "data_entropy",
+            "y": "decompression_speed",
+            "xlabel": "Entropy (bits/byte)",
+            "ylabel": "Decompression speed (bytes/s)",
+            "title": "Decompression speed vs entropy",
+            "fname": "decompression_speed_vs_entropy",
+            "log_x": False,
+            "grid_kwargs": {"linestyle": "--", "linewidth": 0.5},
+            "yerr": "decompression_speed_std",
+            "min_file_size": 512 * 1024,
+        },
+    ]
 
-    # compression_ratio.png
-    plt.figure(figsize=(10, 6))
-    for dtype, recs in by_type.items():
-        sizes = [r.file_size for r in recs]
-        ratios = [r.compression_ratio for r in recs]
-        plt.plot(sizes, ratios, marker="o", label=dtype)
-    plt.xscale("log")
-    plt.xlabel("File size (bytes)")
-    plt.ylabel("Compression ratio (compressed/original)")
-    plt.title("Compression ratio vs file size")
-    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(plots_dir / "compression_ratio.png")
-    plt.savefig(plots_dir / "compression_ratio.svg")
-    plt.close()
-
-    # compression_speed.png
-    plt.figure(figsize=(10, 6))
-    for dtype, recs in by_type.items():
-        sizes = [r.file_size for r in recs]
-        speeds = [r.compression_speed for r in recs]
-        plt.plot(sizes, speeds, marker="o", label=dtype)
-    plt.xscale("log")
-    plt.xlabel("File size (bytes)")
-    plt.ylabel("Compression speed (bytes/s)")
-    plt.title("Compression speed vs file size")
-    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(plots_dir / "compression_speed.png")
-    plt.savefig(plots_dir / "compression_speed.svg")
-    plt.close()
-
-    # decompression_speed.png
-    plt.figure(figsize=(10, 6))
-    for dtype, recs in by_type.items():
-        sizes = [r.file_size for r in recs]
-        speeds = [r.decompression_speed for r in recs]
-        plt.plot(sizes, speeds, marker="o", label=dtype)
-    plt.xscale("log")
-    plt.xlabel("File size (bytes)")
-    plt.ylabel("Decompression speed (bytes/s)")
-    plt.title("Decompression speed vs file size")
-    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(plots_dir / "decompression_speed.png")
-    plt.savefig(plots_dir / "decompression_speed.svg")
-    plt.close()
-
-    # compression_time.png
-    plt.figure(figsize=(10, 6))
-    for dtype, recs in by_type.items():
-        sizes = [r.file_size for r in recs]
-        times = [r.compression_time_mean for r in recs]
-        plt.plot(sizes, times, marker="o", label=dtype)
-    plt.xscale("log")
-    plt.xlabel("File size (bytes)")
-    plt.ylabel("Compression time (s)")
-    plt.title("Compression time vs file size")
-    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(plots_dir / "compression_time.png")
-    plt.savefig(plots_dir / "compression_time.svg")
-    plt.close()
-
-    # decompression_time.png
-    plt.figure(figsize=(10, 6))
-    for dtype, recs in by_type.items():
-        sizes = [r.file_size for r in recs]
-        times = [r.decompression_time_mean for r in recs]
-        plt.plot(sizes, times, marker="o", label=dtype)
-    plt.xscale("log")
-    plt.xlabel("File size (bytes)")
-    plt.ylabel("Decompression time (s)")
-    plt.title("Decompression time vs file size")
-    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(plots_dir / "decompression_time.png")
-    plt.savefig(plots_dir / "decompression_time.svg")
-    plt.close()
-
-    # compression_ratio_vs_entropy.png
-    plt.figure(figsize=(10, 6))
-    for dtype, recs in by_type.items():
-        entropy = [r.data_entropy for r in recs]
-        ratios = [r.compression_ratio for r in recs]
-        plt.plot(entropy, ratios, marker="o", label=dtype)
-    plt.xlabel("Entropy (bits/byte)")
-    plt.ylabel("Compression ratio (compressed/original)")
-    plt.title("Compression ratio vs entropy")
-    plt.grid(True, linestyle="--", linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(plots_dir / "compression_ratio_vs_entropy.png")
-    plt.savefig(plots_dir / "compression_ratio_vs_entropy.svg")
-    plt.close()
-
-    # compression_speed_vs_entropy.png
-    plt.figure(figsize=(10, 6))
-    for dtype, recs in by_type.items():
-        entropy = [r.data_entropy for r in recs]
-        speeds = [r.compression_speed for r in recs]
-        plt.plot(entropy, speeds, marker="o", label=dtype)
-    plt.xlabel("Entropy (bits/byte)")
-    plt.ylabel("Compression speed (bytes/s)")
-    plt.title("Compression speed vs entropy")
-    plt.grid(True, linestyle="--", linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(plots_dir / "compression_speed_vs_entropy.png")
-    plt.savefig(plots_dir / "compression_speed_vs_entropy.svg")
-    plt.close()
-
-    # decompression_speed_vs_entropy.png
-    plt.figure(figsize=(10, 6))
-    for dtype, recs in by_type.items():
-        entropy = [r.data_entropy for r in recs]
-        speeds = [r.decompression_speed for r in recs]
-        plt.plot(entropy, speeds, marker="o", label=dtype)
-    plt.xlabel("Entropy (bits/byte)")
-    plt.ylabel("Decompression speed (bytes/s)")
-    plt.title("Decompression speed vs entropy")
-    plt.grid(True, linestyle="--", linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig(plots_dir / "decompression_speed_vs_entropy.png")
-    plt.savefig(plots_dir / "decompression_speed_vs_entropy.svg")
-    plt.close()
+    for spec in specs:
+        _plot_metric(by_type, plots_dir, **spec)
 
     print(f"Plots saved to {plots_dir}")
 
 
 def main():
-    print("Generating datasets...")
-    generate_datasets()
+    # print("Generating datasets...")
+    # generate_datasets()
 
-    print("Running benchmarks...")
-    run_benchmarks()
+    # print("Running benchmarks...")
+    # run_benchmarks()
 
-    print("Saving results...")
-    save_results_to_csv()
+    # print("Saving results...")
+    # save_results_to_csv()
 
     print("Generating plots...")
     generate_plots()

@@ -4,17 +4,17 @@
  */
 
 #include "CodesTable.hpp"
+#include <cstdint>
 
 CodesTable::CodesTable() = default;
 
 CodesTable::CodesTable(const Bits& bits)
 {
     try {
-        size_t pos = 0;
-        uint8_t n = bits.toByte(pos);
-        pos += 8;
+        uint16_t n = (((uint16_t)bits.toByte(0)) << 8) | ((uint16_t)bits.toByte(8));
+        size_t pos = 16;
 
-        for (uint8_t i = 0; i < n; ++i) {
+        for (uint16_t i = 0; i < n; ++i) {
             uint8_t symbol = bits.toByte(pos);
             pos += 8;
             uint8_t length = bits.toByte(pos);
@@ -33,12 +33,13 @@ CodesTable::CodesTable(const Bits& bits)
 
 Bits CodesTable::toBits() const
 {
-    size_t n = 0;
+    uint16_t n = 0;
     for (const auto& entry : data)
         if (entry.size() > 0)
             ++n;
 
-    Bits result = Bits(n);
+    Bits result = Bits(n >> 8);
+    result.append(Bits(n));
 
     for (size_t sym = 0; sym < 256; ++sym) {
         const auto& entry = data[sym];

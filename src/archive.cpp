@@ -110,8 +110,9 @@ void archive(std::istream& in, std::ostream& out, CompressMode mode)
     switch (mode) {
     case CompressMode::SaveToRam:
         try {
-            for (uint8_t byte : inData)
+            for (uint8_t byte : inData) {
                 writer.writeBits(codesTable.getCode(byte));
+            }
         } catch (const HuffmanArchiveOStreamError& e) {
             throw HuffmanArchiveOStreamError(std::string("archive(): Write out stream error. ") + e.what());
         }
@@ -125,8 +126,11 @@ void archive(std::istream& in, std::ostream& out, CompressMode mode)
         }
 
         try {
-            while (!reader.eof())
-                writer.writeBits(codesTable.getCode(reader.readUInt8()));
+            try {
+                while (!reader.eof())
+                    writer.writeBits(codesTable.getCode(reader.readUInt8()));
+            } catch (const BitReaderEOFError& e) { // if buffer ends with end of file
+            }
         } catch (const BitReaderIOError& e) {
             throw HuffmanArchiveIStreamError(std::string("archive(): Read in stream data error. ") + e.what());
         } catch (const BitReaderEOFError& e) {

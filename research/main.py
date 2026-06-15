@@ -22,17 +22,15 @@ RESTORED.mkdir(exist_ok=True)
 ARCHIVER = "../build-release/harch-cli"
 
 RUNS = 10
-RUNS_DELAY_SECONDS = 0.2
+RUNS_DELAY_SECONDS = 0.0
 
 SIZES = [
     64 * 1024,
     256 * 1024,
-    # 1024 * 1024,
-    # 4 * 1024 * 1024,
-    # 16 * 1024 * 1024,
-    # 32 * 1024 * 1024,
-    # 64 * 1024 * 1024,
-    # 128 * 1024 * 1024,
+    1024 * 1024,
+    4 * 1024 * 1024,
+    16 * 1024 * 1024,
+    64 * 1024 * 1024,
     # 256 * 1024 * 1024,
 ]
 
@@ -107,9 +105,10 @@ def entropy(path: Path) -> float:
 def measure_time(command: list[str]) -> float:
     result = subprocess.run(
         [
-            "/usr/bin/time",
-            "-f",
-            "%U %S",
+            "perf",
+            "stat",
+            "-x",
+            ";",
             *command,
         ],
         stdout=subprocess.DEVNULL,
@@ -118,15 +117,20 @@ def measure_time(command: list[str]) -> float:
         check=True,
     )
 
-    print(result)
-    print(result.args)
+    for line in result.stderr.splitlines():
+        fields = line.split(";")
 
-    print(result.stderr)
-    exit()
+        if len(fields) < 3:
+            continue
 
-    user_time, system_time = map(float, result.stderr.strip().split())
+        metric = fields[2].strip()
 
-    return user_time + system_time
+        if metric.startswith("task-clock"):
+            milliseconds = float(fields[0].replace(",", "."))
+
+            return milliseconds / 1000.0
+
+    raise RuntimeError(f"task-clock not found:\n{result.stderr}")
 
 
 def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
@@ -143,7 +147,9 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
     for _ in range(RUNS):
         archive_file.unlink(missing_ok=True)
         compression_times.append(
-            measure_time([ARCHIVER, "c", str(input_file), str(archive_file)])
+            measure_time(
+                [ARCHIVER, "c", str(input_file), str(archive_file), "-m", "ram"]
+            )
         )
         time.sleep(RUNS_DELAY_SECONDS)
 
@@ -152,7 +158,9 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
     for _ in range(RUNS):
         restored_file.unlink(missing_ok=True)
         decompression_times.append(
-            measure_time([ARCHIVER, "d", str(archive_file), str(restored_file)])
+            measure_time(
+                [ARCHIVER, "d", str(archive_file), str(restored_file), "-m", "ram"]
+            )
         )
         time.sleep(RUNS_DELAY_SECONDS)
 
@@ -179,6 +187,7 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
 def generate_datasets():
     for data_type in DATA_TYPES:
         for size in SIZES:
+            print(f"gener {data_type} + {size}")
             generate_data_file(data_type, size)
 
 
@@ -188,6 +197,7 @@ results: list[BenchmarkResult] = []
 def run_benchmarks():
     for data_type in DATA_TYPES:
         for size in SIZES:
+            print(f"bench {data_type} + {size}")
             results.append(benchmark(data_type, size))
 
 

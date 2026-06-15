@@ -89,7 +89,6 @@ void unarchive(std::istream& in, std::ostream& out)
 
             if (currentNode->isLeaf) {
                 writer.writeUInt8(currentNode->byte);
-                writer.flush();
                 currentNode = root.get();
             }
 

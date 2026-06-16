@@ -79,3 +79,9 @@ research/restored*
 
 # uv
 research/uv.lock
+
+# tex
+*.aux
+*.fdb_latexmk
+*.xdv
+*.fls

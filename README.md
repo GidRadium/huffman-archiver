@@ -18,15 +18,15 @@ Console archiver based on the Huffman algorithm. Works with files of any size. C
 ## Usage
 Help:
 
-`./build/harch-cli -h`
+`./build-release/harch-cli -h`
 
 Compress:
 
-`./build/harch-cli c <input-file> <output-file>`
+`./build-release/harch-cli c <input-file> <output-file>`
 
 Decompress:
 
-`./build/harch-cli d <input-file> <output-file>`
+`./build-release/harch-cli d <input-file> <output-file>`
 
 ## Test
 `cmake -B build-debug -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON`
@@ -48,6 +48,13 @@ Decompress:
 `ctest --test-dir build-san`
 
 ## Research
+
+`cd huffman-archiver`
+
+`cmake -B build-release -DCMAKE_BUILD_TYPE=Release`
+
+`cmake --build build-release -j$(nproc)`
+
 `cd research`
 
 `uv venv`

@@ -5,6 +5,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Windows
+if(CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
 # Sanitizers
 option(ENABLE_SANITIZERS "Enable sanitizers" OFF)
 if(ENABLE_SANITIZERS AND NOT CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -19,14 +24,13 @@ if(ENABLE_SANITIZERS AND NOT CMAKE_BUILD_TYPE STREQUAL "Release")
   endif()
 endif()
 
-# Optimisations
+# Optimizations
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   include(CheckIPOSupported)
   check_ipo_supported(RESULT ipo_supported)
   if(ipo_supported)
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
   endif()
-
   if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native -mtune=native -funroll-loops -finline-functions -fomit-frame-pointer")
     if(NOT ipo_supported)
@@ -48,7 +52,6 @@ add_library(huffman STATIC
     src/archive.cpp
     src/unarchive.cpp
 )
-
 target_include_directories(huffman PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_include_directories(huffman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/huffman)
 
@@ -57,25 +60,18 @@ add_executable(harch-cli
     app/main.cpp
     app/app.cpp
 )
-
 target_link_libraries(harch-cli PRIVATE huffman)
-
 
 # Tests
 option(BUILD_TESTS "Build unit tests (requires GoogleTest)" OFF)
 if(BUILD_TESTS)
-  if(WIN32)
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-  endif()
-
   include(FetchContent)
   FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        v1.14.0
-)
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        v1.14.0
+  )
   FetchContent_MakeAvailable(googletest)
   enable_testing()
-
   add_subdirectory(tests)
 endif()

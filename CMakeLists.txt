@@ -25,14 +25,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Sanitizers
 if(ENABLE_SANITIZERS)
 
-  if(MSVC OR
-     (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND
-      CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
-
-    add_compile_options(-fsanitize=address)
-    add_link_options(-fsanitize=address)
-
-  elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND
+     NOT CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
 
     add_compile_options(
       -fsanitize=address,undefined
@@ -42,6 +36,12 @@ if(ENABLE_SANITIZERS)
     add_link_options(
       -fsanitize=address,undefined
     )
+
+  elseif(MSVC OR
+         (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND
+          CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+
+    add_compile_options(/fsanitize=address)
 
   endif()
 
@@ -93,6 +93,7 @@ target_include_directories(huffman PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/huffman
 )
 
+# App
 add_executable(harch-cli
     app/main.cpp
     app/app.cpp

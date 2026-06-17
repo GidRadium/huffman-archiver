@@ -7,6 +7,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
+
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -23,6 +24,7 @@ jobs:
             export CC=clang-cl
             export CXX=clang-cl
           fi
+
           cmake -B build-san -S . -G Ninja \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DENABLE_SANITIZERS=ON \

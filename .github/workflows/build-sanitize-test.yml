@@ -1,20 +1,36 @@
 name: Sanitize test
 
-on:
-  - push
-  - pull_request
+on: [push, pull_request]
 
 jobs:
   sanitize:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v5
 
       - name: Configure
-        run: cmake -B build-san -S . -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZERS=ON -DBUILD_TESTS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        shell: bash
+        run: |
+          SANITIZERS=OFF
+
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            SANITIZERS=ON
+          fi
+
+          cmake -B build-san -S . -G Ninja \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DENABLE_SANITIZERS=${SANITIZERS} \
+            -DBUILD_TESTS=ON
 
       - name: Build
+        shell: bash
         run: cmake --build build-san
 
-      - name: Run tests with sanitizers
+      - name: Run tests
+        shell: bash
         run: ctest --test-dir build-san --output-on-failure

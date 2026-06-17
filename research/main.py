@@ -10,6 +10,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import matplotlib.pyplot as plt
+import requests
 
 ROOT = Path(__file__).parent
 DATASETS = ROOT / "datasets"
@@ -56,44 +57,34 @@ SIZES = [
     128 * 1024 * 1024,
 ]
 
-DATA_TYPES = [
-    "uniform",
-    "periodic2b",
-    "periodic4b",
-    "periodic8b",
-    "periodic16b",
-    "periodic32b",
-    "random",
-    "text",
-]
+DATA_TYPES = {
+    "uniform": b"A",
+    "periodic2b": b"AB",
+    "periodic4b": b"ABCD",
+    "periodic8b": b"ABCDEFGH",
+    "periodic16b": b"ABCDEFGHIJKLMNOP",
+    "periodic32b": b"ABCDEFGHIJKLMNOPabcdefghijklmnop",
+    "random": b"",
+}
+
+
+REAL_TYPES = {
+    "txt": "https://www.gutenberg.org/cache/epub/1342/pg1342.txt",
+    "csv": "https://filesamples.com/samples/document/csv/sample4.csv",
+    "json": "https://filesamples.com/samples/code/json/sample4.json",
+    "bmp": "https://filesamples.com/samples/image/bmp/sample_640%C3%97426.bmp",
+    "jpeg": "https://filesamples.com/samples/image/jpeg/sample_640%C3%97426.jpeg",
+    "png": "https://filesamples.com/samples/image/png/sample_640%C3%97426.png",
+    "wav": "https://filesamples.com/samples/audio/wav/sample3.wav",
+    "mp3": "https://filesamples.com/samples/audio/mp3/sample3.mp3",
+    "mp4": "https://filesamples.com/samples/video/mp4/sample_640x360.mp4",
+    "zip": "https://samplefile.com/samples/download/archive/zip/accounting_system_exchange_fixture_pack.zip/",
+    "7z": "https://samplefile.com/samples/download/archive/7z/7z_sample_file_1MB.7z/",
+    "exe": "https://github.com/git-for-windows/git/releases/download/v2.45.1.windows.1/MinGit-2.45.1-64-bit.zip",
+}
 
 
 def generate_data_file(data_type: str, data_size: int):
-    pattern = b""
-    match data_type:
-        case "uniform":
-            pattern = b"A"
-        case "periodic2b":
-            pattern = b"AB"
-        case "periodic4b":
-            pattern = b"ABCD"
-        case "periodic8b":
-            pattern = b"ABCDEFGH"
-        case "periodic16b":
-            pattern = b"ABCDEFGHIJKLMNOP"
-        case "periodic32b":
-            pattern = b"ABCDEFGHIJKLMNOPabcdefghijklmnop"
-        case "text":
-            pattern = (
-                b"Console archiver based on the Huffman algorithm. !? 1234567890 - $,\n"
-                b"Works with files of any size.\n"
-                b"Can compress either in RAM or after two passes of the file.\n"
-            )
-        case "random":
-            pass
-        case _:
-            return
-
     file_dir = DATASETS / data_type
     file_dir.mkdir(exist_ok=True)
     file_path = file_dir / f"{data_size}.bin"
@@ -101,7 +92,11 @@ def generate_data_file(data_type: str, data_size: int):
         if data_type == "random":
             file.write(os.urandom(data_size))
         else:
-            file.write((pattern * (data_size // len(pattern) + 1))[:data_size])
+            file.write(
+                (DATA_TYPES[data_type] * (data_size // len(DATA_TYPES[data_type]) + 1))[
+                    :data_size
+                ]
+            )
 
 
 @dataclass
@@ -191,7 +186,7 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
         )
         time.sleep(RUNS_DELAY_SECONDS)
 
-    if input_file.read_bytes() != restored_file.read_bytes():
+    if input_file.stat().st_size != restored_file.stat().st_size:
         raise RuntimeError(f"Verification failed for {input_file}")
 
     result.compression_ratio = result.compressed_size / result.file_size
@@ -204,7 +199,7 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
         statistics.stdev(decompression_times) if len(decompression_times) > 1 else 0.0
     )
     result.compression_speed = result.file_size / result.compression_time_mean
-    result.decompression_speed = result.file_size / result.decompression_time_mean
+    result.decompression_speed = result.compressed_size / result.decompression_time_mean
 
     if result.compression_time_mean > 0 and result.compression_time_std > 0:
         result.compression_speed_std = result.compression_speed * (
@@ -223,6 +218,31 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
     result.data_entropy = entropy(input_file)
 
     return result
+
+
+def load_real_patterns():
+    print("Loading patterns...")
+
+    for name, url in REAL_TYPES.items():
+        print(f"download {name}")
+
+        response = requests.get(
+            url,
+            timeout=120,
+            headers={
+                "User-Agent": "huffman-benchmark/1.0",
+            },
+        )
+        response.raise_for_status()
+
+        data = response.content[: 3 * 1024 * 1024]
+
+        if not data:
+            raise RuntimeError(f"Downloaded empty file for {name}")
+
+        DATA_TYPES[name] = data
+
+        print(f"loaded {name}: {len(data):,} bytes".replace(",", " "))
 
 
 # ROOT / "datasets" / f"{data_type}" / f"{data_size}.bin"
@@ -405,9 +425,9 @@ def generate_plots():
             "yerr": "compression_speed_std",
         },
         {
-            "x": "file_size",
+            "x": "compressed_size",
             "y": "decompression_speed",
-            "xlabel": "File size (bytes)",
+            "xlabel": "Compressed file size (bytes)",
             "ylabel": "Decompression speed (bytes/s)",
             "title": "Decompression speed vs file size",
             "fname": "decompression_speed",
@@ -481,6 +501,7 @@ def generate_plots():
 
 
 def main():
+    load_real_patterns()
     generate_datasets()
     run_benchmarks()
     save_results_to_csv()

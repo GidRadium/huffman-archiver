@@ -12,4 +12,4 @@ target_link_libraries(huffman_tests PRIVATE huffman gtest_main gmock_main)
 target_include_directories(huffman_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
 include(GoogleTest)
-gtest_discover_tests(huffman_tests)
+gtest_add_tests(TARGET huffman_tests)

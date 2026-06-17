@@ -1,11 +1,11 @@
-name: Lint and test
+name: Lint
 
 on:
   - push
   - pull_request
 
 jobs:
-  build-lint-and-test:
+  build-and-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -19,9 +19,6 @@ jobs:
 
       - name: Build
         run: cmake --build build
-
-      - name: Run tests
-        run: ctest --test-dir build --output-on-failure
 
       - name: Lint
         run: |

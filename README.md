@@ -1,6 +1,6 @@
 # huffman-archiver
 
-[![Lint and test](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-lint-test.yml/badge.svg)](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-lint-test.yml)
+[![Lint](https://github.com/GidRadium/huffman-archiver/actions/workflows/lint.yml/badge.svg)](https://github.com/GidRadium/huffman-archiver/actions/workflows/lint.yml)
 [![Sanitize test](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-sanitize-test.yml/badge.svg)](https://github.com/GidRadium/huffman-archiver/actions/workflows/build-sanitize-test.yml)
 
 Console archiver based on the Huffman algorithm. Works with files of any size. Can compress either in RAM or after two passes of the file.

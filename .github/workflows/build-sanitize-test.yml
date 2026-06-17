@@ -24,10 +24,9 @@ jobs:
             export CXX=clang-cl
           fi
           cmake -B build-san -S . -G Ninja \
-            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DENABLE_SANITIZERS=ON \
-            -DBUILD_TESTS=ON \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            -DBUILD_TESTS=ON
 
       - name: Build
         shell: bash

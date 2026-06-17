@@ -25,23 +25,21 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Sanitizers
 if(ENABLE_SANITIZERS)
 
-  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND
-     NOT CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
     add_compile_options(
-      -fsanitize=address,undefined
+      -fsanitize=address
       -fno-omit-frame-pointer
     )
 
     add_link_options(
-      -fsanitize=address,undefined
+      -fsanitize=address
     )
 
-  elseif(MSVC OR
-         (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND
-          CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+  elseif(MSVC)
 
     add_compile_options(/fsanitize=address)
+    add_link_options(/fsanitize=address)
 
   endif()
 

@@ -21,8 +21,8 @@ jobs:
         shell: bash
         run: |
           if [ "$RUNNER_OS" = "Windows" ]; then
-            export CC=clang-cl
-            export CXX=clang-cl
+            export CC=clang
+            export CXX=clang++
           fi
 
           cmake -B build-san -S . -G Ninja \

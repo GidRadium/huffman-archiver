@@ -5,7 +5,7 @@ on:
   - pull_request
 
 jobs:
-  lint:
+  build-and-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -13,6 +13,12 @@ jobs:
       - name: Check format
         run: |
           find . -path ./build -prune -o -type f \( -name '*.cpp' -o -name '*.hpp' \) -print | xargs clang-format-18 --style=file --dry-run -Werror
+
+      - name: Configure
+        run: cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_TESTS=ON
+
+      - name: Build
+        run: cmake --build build
 
       - name: Lint
         run: |

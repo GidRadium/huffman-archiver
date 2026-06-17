@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.14)
+
+# Windows
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 project(HuffmanArchiver VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Windows
-if(CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
-  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-endif()
 
 # Sanitizers
 option(ENABLE_SANITIZERS "Enable sanitizers" OFF)

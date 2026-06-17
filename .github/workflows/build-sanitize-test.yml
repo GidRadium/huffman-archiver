@@ -1,20 +1,38 @@
 name: Sanitize test
 
-on:
-  - push
-  - pull_request
+on: [push, pull_request]
 
 jobs:
   sanitize:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v5
 
+      - name: Add LLVM to PATH (Windows)
+        if: runner.os == 'Windows'
+        run: echo "C:\Program Files\LLVM\bin" >> $GITHUB_PATH
+
       - name: Configure
-        run: cmake -B build-san -S . -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZERS=ON -DBUILD_TESTS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            export CC=clang
+            export CXX=clang++
+          fi
+          cmake -B build-san -S . -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_SANITIZERS=ON \
+            -DBUILD_TESTS=ON \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: Build
+        shell: bash
         run: cmake --build build-san
 
       - name: Run tests with sanitizers
+        shell: bash
         run: ctest --test-dir build-san --output-on-failure

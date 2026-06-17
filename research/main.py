@@ -204,7 +204,7 @@ def benchmark(data_type: str, data_size: int) -> BenchmarkResult:
         statistics.stdev(decompression_times) if len(decompression_times) > 1 else 0.0
     )
     result.compression_speed = result.file_size / result.compression_time_mean
-    result.decompression_speed = result.file_size / result.decompression_time_mean
+    result.decompression_speed = result.compressed_size / result.decompression_time_mean
 
     if result.compression_time_mean > 0 and result.compression_time_std > 0:
         result.compression_speed_std = result.compression_speed * (
@@ -405,9 +405,9 @@ def generate_plots():
             "yerr": "compression_speed_std",
         },
         {
-            "x": "file_size",
+            "x": "compressed_size",
             "y": "decompression_speed",
-            "xlabel": "File size (bytes)",
+            "xlabel": "Compressed file size (bytes)",
             "ylabel": "Decompression speed (bytes/s)",
             "title": "Decompression speed vs file size",
             "fname": "decompression_speed",

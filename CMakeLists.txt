@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Windows
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 project(HuffmanArchiver VERSION 1.0 LANGUAGES CXX)
 
@@ -13,8 +15,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(ENABLE_SANITIZERS "Enable sanitizers" OFF)
 if(ENABLE_SANITIZERS AND NOT CMAKE_BUILD_TYPE STREQUAL "Release")
   if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
-    add_link_options(-fsanitize=address,undefined)
+    if(CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
+      add_compile_options(-fsanitize=address,undefined)
+      add_link_options(-fsanitize=address,undefined)
+    else()
+      add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
+      add_link_options(-fsanitize=address,undefined)
+    endif()
   elseif(MSVC)
     add_compile_options(/fsanitize=address)
     add_link_options(/fsanitize=address)
@@ -23,13 +30,14 @@ if(ENABLE_SANITIZERS AND NOT CMAKE_BUILD_TYPE STREQUAL "Release")
   endif()
 endif()
 
-# Optimizations
+# Optimisations
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   include(CheckIPOSupported)
   check_ipo_supported(RESULT ipo_supported)
   if(ipo_supported)
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
   endif()
+
   if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native -mtune=native -funroll-loops -finline-functions -fomit-frame-pointer")
     if(NOT ipo_supported)

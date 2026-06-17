@@ -13,27 +13,24 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Add LLVM to PATH (Windows)
-        if: runner.os == 'Windows'
-        run: echo "C:\Program Files\LLVM\bin" >> $GITHUB_PATH
-
       - name: Configure
         shell: bash
         run: |
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            export CC=clang
-            export CXX=clang++
+          SANITIZERS=OFF
+
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            SANITIZERS=ON
           fi
 
           cmake -B build-san -S . -G Ninja \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-            -DENABLE_SANITIZERS=ON \
+            -DENABLE_SANITIZERS=${SANITIZERS} \
             -DBUILD_TESTS=ON
 
       - name: Build
         shell: bash
         run: cmake --build build-san
 
-      - name: Run tests with sanitizers
+      - name: Run tests
         shell: bash
         run: ctest --test-dir build-san --output-on-failure

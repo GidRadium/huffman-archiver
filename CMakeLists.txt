@@ -5,18 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Windows + clang
-if(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  string(REGEX REPLACE "/MD[d]?" "/MTd" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-  string(REGEX REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-  if(NOT CMAKE_CXX_FLAGS_DEBUG MATCHES "/MTd")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
-  endif()
-  if(NOT CMAKE_CXX_FLAGS_RELEASE MATCHES "/MT")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-  endif()
-endif()
-
 # Sanitizers
 option(ENABLE_SANITIZERS "Enable sanitizers" OFF)
 if(ENABLE_SANITIZERS AND NOT CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -76,6 +64,10 @@ target_link_libraries(harch-cli PRIVATE huffman)
 # Tests
 option(BUILD_TESTS "Build unit tests (requires GoogleTest)" OFF)
 if(BUILD_TESTS)
+  if(WIN32)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  endif()
+
   include(FetchContent)
   FetchContent_Declare(
   googletest
